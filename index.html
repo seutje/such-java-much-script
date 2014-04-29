@@ -43,23 +43,184 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>HTML Presentations Made Easy</h3>
+					<h1>Such Java,<br>Much Script</h1>
+					<h3>An introduction to JavaScript</h3>
 					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
+						<small>Created by <a href="http://twitter.com/seutje">@seutje</a></small>
 					</p>
 				</section>
 
 				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
+					<h2>Mandatory introduction slide</h2>
+	        <ul class="bare">
+	            <li>Steve De Jonghe</li>
+	            <li>Intertubes plumber @ <a href="http://wunderkraut.com">Wunderkraut</a> <a href="http://wunderkraut.be">Belgium</a> (Antwerp office)</li>
+	            <li><a href="http://lmgtfy.com/?q=seutje">seutje</a></li>
+	            <li>IRC #drupal-contribute #jQuery</li>
+	            <li>Drupal Core 7 &amp; 8</li>
+	            <li>JavaScript component<br><a href="http://drupal.org/user/598310">Théodore Biadala</a> &amp; <a href="http://drupal.org/user/748566">Jesse Beach</a></li>
+	        </ul>
 
 					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+						Point out minimal core involvement.
 					</aside>
+				</section>
+
+				<section>
+					<h2>Types &amp; Primitives</h2>
+					<h3>Do you even coerce?</h3>
+				</section>
+
+				<section>
+					<h2>Everything can be considered an Object, except:</h2>
+					<ul class="bare">
+						<li>null</li>
+						<li>undefined</li>
+						<li>number (double precision floating point)</li>
+						<li>boolean</li>
+						<li>string</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Primitives vs Objects</h2>
+					<ul class="bare">
+						<li>Primitives cannot be broken down to an extended type and have no properties of their own (few exceptions like strings).</li>
+						<li>All the rest are essentially extended Objects (Array, Date, etc.).</li>
+						<li>Use literal notation where possible, avoid using new keyword on base types<br>
+							<pre><code class="language-javascript" data-trim>
+typeof 'foo'; // "string" - Good
+typeof String('foo'); "string" - Bad
+typeof new String('foo'); "object" - Bad
+typeof (new String('foo')).valueOf(); "string" - Bad
+							</code></pre>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Cautionary note on typeof</h2>
+					<p>
+						<pre><code class="language-javascript" data-trim>
+typeof null; // "object"
+typeof []; // "object"
+typeof /regex/; // "function" in some browsers
+						</code></pre>
+					</p>
+				</section>
+
+				<section>
+					<h2>Dead set on matching the type?</h2>
+					<p>
+						Abuse the Object.toString method!
+					</p>
+					<pre><code class="language-javascript" data-trim>
+Object.prototype.toString.call(null); // "[object Null]"
+Object.prototype.toString.call([]); // "[object Array]"
+Object.prototype.toString.call(/regex/); // "[object RegExp]"
+					</code></pre>
+					<p>(More on prototypes and function methods later!)</p>
+					<aside class="notes">
+						<p><small>If you need this, you probably have a bigger problem.</small></p>
+					</aside>
+				</section>
+
+				<section>
+					<h2>Cautionary note on numbers</h2>
+					<ul>
+						<li>Floating point!<br><pre><code class="language-javascript" data-trim>0.2 + 0.2 + 0.2; // 0.6000000000000001 WAT?!</code></pre></li>
+						<li>don't care about precision?
+							<ul>
+								<li>.toFixed() to determine float precision<br><pre><code class="language-javascript">(0.2 + 0.2 + 0.2).toFixed(2); // 0.60</code></pre></li>
+								<li>parseInt() with a radix<br><pre><code class="language-javascript">parseInt(42.123456789, 10); // 42</code></pre></li>
+							</ul>
+						</li>
+						<li>Working with currency? Do everything in cents or use a library to provide <a href="https://github.com/MikeMcl/big.js">bigger decimals with arbitraty precision</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Cautionary note on strings</h2>
+					<ul>
+						<li>Not as bad as PHP, but still pretty weird sometimes.</li>
+						<li><strong>parseInt() if you want to do maths, always provide radix parameter!</strong>
+							<pre><code class="language-javascript" data-trim>
+parseInt('042'); // Some browsers will default to octal 66.
+parseInt('042', 10); // Force parsing as decimal.
+							</code></pre>
+						</li>
+						<li>They can be partially accessed like an array (mainly getters).<br><pre><code class="language-javascript" data-trim>
+'foo'[0]; // 'f'
+'foo'[0] = 'p'; // Nice try, no setters tho!
+'foo'.split('f').join('p'); // 'poo'
+'foo'.length; // 3</code></pre>
+This is often referred to as "<em>Array-like</em>" (again, string are actually a bit of an exception here).</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>The mighty Array!</h2>
+					<ul>
+						<li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to act like an object on top of being an array.<pre><code class="language-javascript" data-trim>
+var foo = ['poop'];
+foo.length; // 1
+foo.bar = 'bar';
+foo.length; // 1
+foo.bar; // 'bar' (foo['bar'] also works)
+foo; // ['poop']
+						</code></pre></li>
+						<li>This is similar to what jQuery exposes when you run a query through $(): it returns an array of results that's augmented with properties and methods.</li>
+						<li>Want a so-called associative array? Use an Object!</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>The mighty Array!</h2>
+					<ul>
+						<li>Avoid manually assigning keys, missing ones will be undefined. Instead, use Array.push().<pre><code class="language-javascript" data-trim>
+var foo = ['poop', 'pipi'];
+foo.push('kaka'); // 3 (Array.push returns new length)
+foo[7] = 'lolapi';
+foo.length; // 8
+foo[6]; // undefined
+						</code></pre></li>
+						<li>Most array methods will not mangle the original array, but instead return a mangled copy. Notable exceptions are: pop, push, shift, unshift, splice.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>The mighty Array!</h2>
+					<ul>
+						<li><strong>Never ever</strong> for...in loop on an array, use a regular for-loop!
+							<pre><code class="language-javascript" data-trim>
+var foo = ['bar'];
+foo.lol = 'gotcha!';
+for (var i in foo) {
+	console.log(foo[i]); // 'bar', 'gotcha!'
+}
+for (var i = 0, len = foo.length; i < len; i++) {
+	console.log(foo[i]); // 'bar'
+}
+							</code></pre></li>
+							<li>More on this later!</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>The even mightier Object!</h2>
+					<ul>
+						<li>As mentioned before, the Object object is the basis for most types in JavaScript.</li>
+						<li>Avoid extending or overriding its prototype as this will affect nearly everything.</li>
+						<li>When looping over an object, use hasOwnProperty to verify it did not come from whatever mangled the prototype
+						<pre><code class="language-javascript">Object.prototype.lol = 'lolapi';
+var foo = {'meh': 'poo'};
+for (var key in foo) {
+console.log(key); // 'meh', 'lol'
+  if (foo.hasOwnProperty(key)) {
+    console.log(key); // Just 'meh'
+  }
+}</code></pre></li>
+				</ul>
 				</section>
 
 				<!-- Example of nested vertical slides -->
@@ -184,7 +345,7 @@
 					</p>
 					<p>
 						<small>
-							* Theme demos are loaded after the presentation which leads to flicker. In production you should load your theme in the <code>&lt;head&gt;</code> using a <code>&lt;link&gt;</code>.
+							* Theme demos are loaded after the presentation which leads to flicker. In production you should load your theme in the <code class="language-javascript">&lt;head&gt;</code> using a <code class="language-javascript">&lt;link&gt;</code>.
 						</small>
 					</p>
 				</section>
@@ -192,7 +353,7 @@
 				<section>
 					<h2>Global State</h2>
 					<p>
-						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						Set <code class="language-javascript">data-state="something"</code> on a slide and <code class="language-javascript">"something"</code>
 						will be added as a class to the document element when the slide is open. This lets you
 						apply broader style changes, like switching the background.
 					</p>
@@ -201,9 +362,9 @@
 				<section data-state="customevent">
 					<h2>Custom Events</h2>
 					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
+						Additionally custom events can be triggered on a per slide basis by binding to the <code class="language-javascript">data-state</code> name.
 					</p>
-					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+					<pre><code class="language-javascript" data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
 Reveal.addEventListener( 'customevent', function() {
 	console.log( '"customevent" has fired' );
 } );
@@ -214,7 +375,7 @@ Reveal.addEventListener( 'customevent', function() {
 					<section data-background="#007777">
 						<h2>Slide Backgrounds</h2>
 						<p>
-							Set <code>data-background="#007777"</code> on a slide to change the full page background to the given color. All CSS color formats are supported.
+							Set <code class="language-javascript">data-background="#007777"</code> on a slide to change the full page background to the given color. All CSS color formats are supported.
 						</p>
 						<a href="#" class="image navigate-down">
 							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
@@ -222,25 +383,25 @@ Reveal.addEventListener( 'customevent', function() {
 					</section>
 					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
 						<h2>Image Backgrounds</h2>
-						<pre><code>&lt;section data-background="image.png"&gt;</code></pre>
+						<pre><code class="language-javascript">&lt;section data-background="image.png"&gt;</code></pre>
 					</section>
 					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" data-background-repeat="repeat" data-background-size="100px">
 						<h2>Repeated Image Backgrounds</h2>
-						<pre><code style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+						<pre><code class="language-javascript" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
 					</section>
 				</section>
 
 				<section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
 					<h2>Background Transitions</h2>
 					<p>
-						Pass reveal.js the <code>backgroundTransition: 'slide'</code> config argument to make backgrounds slide rather than fade.
+						Pass reveal.js the <code class="language-javascript">backgroundTransition: 'slide'</code> config argument to make backgrounds slide rather than fade.
 					</p>
 				</section>
 
 				<section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
 					<h2>Background Transition Override</h2>
 					<p>
-						You can override background transitions per slide by using <code>data-background-transition="slide"</code>.
+						You can override background transitions per slide by using <code class="language-javascript">data-background-transition="slide"</code>.
 					</p>
 				</section>
 
@@ -258,7 +419,7 @@ Reveal.addEventListener( 'customevent', function() {
 
 				<section>
 					<h2>Pretty Code</h2>
-					<pre><code data-trim contenteditable>
+					<pre><code class="language-javascript" data-trim contenteditable>
 function linkify( selector ) {
   if( supports3DTransforms ) {
 
@@ -291,7 +452,7 @@ function linkify( selector ) {
 						<p>Hit the next arrow...</p>
 						<p class="fragment">... to step through ...</p>
 						<ol>
-							<li class="fragment"><code>any type</code></li>
+							<li class="fragment"><code class="language-javascript">any type</code></li>
 							<li class="fragment"><em>of view</em></li>
 							<li class="fragment"><strong>fragments</strong></li>
 						</ol>
