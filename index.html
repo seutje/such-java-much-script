@@ -142,14 +142,30 @@ parseInt('042'); // Some browsers will default to octal 66.
 parseInt('042', 10); // Force parsing as decimal.
               </code></pre>
             </li>
-            <li>They can be partially accessed like an array (mainly getters).<br><pre><code class="language-javascript" data-trim>
-'foo'[0]; // 'f'
-'foo'[0] = 'p'; // Nice try, no setters tho!
-'foo'.split('f').join('p'); // 'poo' (like PHPs explode/implode)
-'foo'.length; // 3
-'foo'.bar = 'baz'; // Nice try, primitives can't have properties tho!</code></pre>
-This is often referred to as "<em>Array-like</em>" (again, string are actually a bit of an exception here), but should not be considered a fully-fledged array.</li>
+            <li>They can be partially accessed like an array (mainly getters).</li>
           </ul>
+          <pre><code class="language-javascript" data-trim>
+var foo = 'foo';
+foo[0]; // 'f'
+foo[0] = 'p'; // Nice try, no setters tho!
+foo.split('f').join('p'); // 'poo' (like PHPs explode/implode)
+foo.length; // 3
+foo.bar = 'baz'; // Nice try, primitives can't have properties tho!
+foo.bar; // undefined
+          </code></pre>
+          <p>This is often referred to as "<em>Array-like</em>" (again, string are actually a bit of an exception here), but should not be considered a fully-fledged array.</p>
+        </section>
+
+        <section>
+          <h2>Bonus!</h2>
+          <pre><code class="language-javascript" data-trim>
+var foo = new String('foo');
+// Secretly an object wrapper pretending to be a string
+foo === 'foo'; // false
+foo == 'foo'; // true
+foo.lol = 'lol'; // now it actually sticks!
+foo.lol; // 'lol'
+          </code></pre>
         </section>
 
         <section>
