@@ -250,6 +250,59 @@ console.log(foo()); // undefined
         </section>
 
         <section>
+          <h2>Function: Creator of scope</h2>
+          <h3>Immediately Invoked Function Expression</h3>
+          <pre><code class="language-javascript" data-trim>
+var x = 'bar';
+
+(function (x) {
+
+  x === 'foo'; // true
+
+})('foo');
+
+x === 'bar'; // true
+
+// Roughly equivalent (without accessible leftovers)
+
+var foo = function(x) {}
+foo('foo');
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Function: Creator of scope</h2>
+          <h3>Immediately Invoked Function Expression</h3>
+          <pre><code class="language-javascript" data-trim>
+(function (x, y) {
+
+  x === 'foo'; // true
+  y === window; // true if in a browser and not hosed outside scope
+  var foo = "I won't leak to the global scope!";
+  y.bar = "I will!"; // same as window.bar
+
+})('foo', this);
+foo; // undefined
+bar; // "I will!"
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Function: IIFE</h2>
+          <h3>Why is this useful?</h3>
+          <pre><code class="language-javascript" data-trim>
+(function(window){
+  var myLittlePrivate = 'foo';
+  window.getPrivate = function() {
+    return myLittlePrivate;
+  };
+})(this);
+getPrivate(); // 'foo'
+myLittlePrivate; // ReferenceError: myLittlePrivate is not defined
+          </code></pre>
+        </section>
+
+        <section>
           <h2>The mightiest: Function</h2>
           <h3>Can return functions</h3>
           <pre><code class="language-javascript">function multiply (x) {
@@ -291,8 +344,8 @@ var bar = foo.bind('bar!');
 
 foo(); // returns reference to the window object.
 bar(); // 'bar!'
-foo.call('lol'); // 'lol'
-foo.apply('lol'); // 'lol'
+foo.call('lol'/* , arg1, arg2 */); // 'lol'
+foo.apply('lol'/* , [arg1, arg2] */); // 'lol'
           </code></pre>
         </section>
 
@@ -360,9 +413,8 @@ foo()()()()()()()(); // ...
           <h3>Why is this even useful?</h3>
           <pre><code class="language-javascript" data-trim>
 // Remember, we're also an object.
-var foo = function bar() {
+var foo = function bar(op) {
   // Do some things...
-
   bar.doStuff = function() {
     // Do stuff
     return bar;
@@ -371,10 +423,12 @@ var foo = function bar() {
     // Do more stuff
     return bar;
   };
+  if (op && bar[op]) { // if an op was passed and it exists
+    return bar[op](); // call it and return the return
+  }
   return bar; // Return ourselves
 };
-
-foo().doStuff().doMoreStuff(); // ...
+foo().doStuff().doMoreStuff(); // or foo('doStuff')('doMoreStuff')...
           </code></pre>
         </section>
 
@@ -408,45 +462,67 @@ var two = new Foo();
 one === two; // false, they are 2 separate instances
 one.bar() === two.bar(); // false
 one.bar() === one; // true
-          </code></pre>
-          <p>More on inheritence later!</p>
-        </section>
-
-        <section>
-          <h2>Function: Creator of scope</h2>
-          <h3>Immediately Invoked Function Expression</h3>
-          <pre><code class="language-javascript" data-trim>
-var x = 'bar';
-
-(function (x) {
-
-  x === 'foo'; // true
-
-})('foo');
-
-x === 'bar'; // true
-
-// Roughly equivalent (without accessible leftovers)
-
-var foo = function(x) {}
-foo('foo');
+one instanceof Foo; // true
           </code></pre>
         </section>
 
         <section>
-          <h2>Function: Creator of scope</h2>
-          <h3>Immediately Invoked Function Expression</h3>
+          <h2>The mightiest: Functions</h2>
+          <h3>Inheritance</h3>
           <pre><code class="language-javascript" data-trim>
-(function (x, y) {
+var Foo = function() {
+  this.bar = 0;
+};
+// Define its base object.
+Foo.prototype = {
+  addBar: function() { this.bar++; }
+};
+var foo = new Foo(); // foo > Foo > Foo.prototype > Object.prototype > null
+foo.addBar();
+foo.bar; // 1
+Object.getPrototypeOf(foo).bar; // undefined
+Object.getPrototypeOf(foo).addBar; // function() { this.bar++; }
+          </code></pre>
+        </section>
 
-  x === 'foo'; // true
-  y === window; // true if in a browser
-  var foo = "I won't leak to the global scope!";
-  y.bar = "I will!";
+        <section>
+          <h2>The mightiest: Functions</h2>
+          <h3>Inheritance</h3>
+          <pre><code class="language-javascript" data-trim>
+var Foo = function() {
+  this.bar = 0;
+  this.addBar = function() { this.bar++; return this.bar; };
+};
+var Bar = function() {
+  this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
+};
+Bar.prototype = new Foo(); // Set Bar's prototype to new instance of Foo
+var foo = new Foo();
+var bar = new Bar(); // bar > Bar > Foo > Foo.prototype > Object.prototype > null
+bar.addBar(7); // 7
+foo.addBar(7); // 1
+bar.bar; // 7
+          </code></pre>
+        </section>
 
-})('foo', this);
-foo; // undefined
-bar; // "I will!"
+        <section>
+          <h2>The mightiest: Functions</h2>
+          <h3>Inheritance</h3>
+          <pre><code class="language-javascript" data-trim>
+var Foo = function() {
+  this.bar = 0;
+  this.addBar = function() { this.bar++; return this.bar; };
+};
+var Bar = function() {
+  this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
+  this.callSuper = function(op, arg) {
+    return Object.getPrototypeOf(this)[op].call(this, arg);
+  };
+}
+Bar.prototype = new Foo();
+var foo = new Foo();
+var bar = new Bar();
+bar.callSuper('addBar', 7); // 1
           </code></pre>
         </section>
 
