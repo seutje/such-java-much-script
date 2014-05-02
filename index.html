@@ -140,6 +140,7 @@ Object.prototype.toString.call(/regex/); // "[object RegExp]"</code></pre>
               <pre><code class="language-javascript" data-trim>
 parseInt('042'); // Some browsers will default to octal 66.
 parseInt('042', 10); // Force parsing as decimal.
+parseInt('12foo34', 10); // 12 (!)
               </code></pre>
             </li>
             <li>They can be partially accessed like an array (mainly getters).</li>
@@ -169,9 +170,54 @@ foo.lol; // 'lol'
         </section>
 
         <section>
+          <h2>Type coercion</h2>
+          <h3>The operator matters!</h3>
+          <p>With strings and numbers, the + operator will coerce everything to strings</p>
+          <pre><code class="language-javascript" data-trim>
+'123' + 4; // '1234'
+1 + '234'; // '1234'
+          </code></pre>
+          <p>Likewise, the - operator will coerce everything to a number</p>
+          <pre><code class="language-javascript" data-trim>
+'123' - 4; // 119
+1 - '234' ; // -233
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Type coercion</h2>
+          <h3>cheap casting!</h3>
+          <p>Using the unary + operator, we can easily cast to a number</p>
+          <pre><code class="language-javascript" data-trim>
+'1.23' + '1.23'; // '1.231.23'
+(+'1.23') + (+'1.23'); // 2.46 (parens optional)
+          </code></pre>
+          <p>This does not save you from <code>NaN</code>ty<code>NaN</code> problems though, always check user input!</p>
+        </section>
+
+        <section>
+          <h2>Truthy fruity</h2>
+          <h3>What !!is and what !is?</h3>
+          <p>The following values are considered not "truthy" and will coerce to <code>false</code>:<br><code>undefined</code>, <code>null</code>, <code>NaN</code>, <code>0</code>, <code>''</code></p>
+        </section>
+
+        <section>
+          <h2>Truthy fruity</h2>
+          <h3>Shortcuts</h3>
+          <pre><code class="language-javascript" data-trim>
+// someInit will not be executed if someVar is falsy
+var foo = someVar || someInit();
+// Useful for defaults!
+var bar = function (x) {
+  x = x || myDefaults;
+};
+          </code></pre>
+        </section>
+
+        <section>
           <h2>The mighty Array!</h2>
           <ul>
-            <li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to act like an object on top of being an array.<pre><code class="language-javascript" data-trim>
+            <li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to show its underling object-like nature.<pre><code class="language-javascript" data-trim>
 var foo = ['poo'];
 foo.length; // 1
 foo.bar = 'bar';
@@ -206,7 +252,7 @@ foo.lol = 'gotcha!';
 for (var i in foo) {
   console.log(foo[i]); // 'bar', 'gotcha!'
 }
-for (var i = 0, len = foo.length; i < len; i++) {
+for (var i = 0, len = foo.length; i &lt; len; i++) {
   console.log(foo[i]); // 'bar'
 }
               </code></pre></li>
@@ -305,18 +351,21 @@ myLittlePrivate; // ReferenceError: myLittlePrivate is not defined
         <section>
           <h2>The mightiest: Function</h2>
           <h3>Can return functions</h3>
-          <pre><code class="language-javascript">function multiply (x) {
+          <pre><code class="language-javascript" data-trim>
+function multiply (x) {
   return function (y) {
     return x*y;
   }
 }
-multiply(2)(3); // 6</code></pre>
+multiply(2)(3); // 6
+          </code></pre>
         </section>
 
         <section>
           <h2>The mightiest: Function</h2>
           <h3>And so much more!</h3>
-          <pre><code class="language-javascript">function maths(x) {
+          <pre><code class="language-javascript" data-trim>
+function maths(x) {
   return {
     multiply: function(y) {
       return x * y;
@@ -329,7 +378,25 @@ multiply(2)(3); // 6</code></pre>
 }
 maths(2).multiply(3); // 6
 maths(2).add(3); // 5
-maths(-2).abs; // 2</code></pre>
+maths(-2).abs; // 2
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The mighties: Function</h2>
+          <h3>"this" is madness!</h3>
+          <pre><code class="language-javascript" data-trim>
+var foo = {
+  a: 'lol',
+  b: function() {
+    return this.a;
+  }
+};
+foo.b(); // 'lol'
+var bar = foo.b;
+bar(); // undefined
+          </code></pre>
+          <p>Here, <code>bar</code> is actually <code>window.bar</code>, so the window object becomes the context, and there is no <code>window.a</code>.</p>
         </section>
 
         <section>
@@ -410,6 +477,24 @@ foo()()()()()()()(); // ...
 
         <section>
           <h2>The mightiest: Functions</h2>
+          <h3>Callbacks &amp; setTimeout/setInterval</h3>
+          <pre><code class="language-javascript" data-trim>
+// Logs 'HOLLABACK!' every second.
+var foo = function() {
+  console.log('HOLLABACK!');
+  window.setTimeout(foo, 1000);
+};
+window.setTimeout(foo, 1000);
+// Bad:
+var foo = function() {
+  console.log('What if I took more than 1 second to run?');
+};
+window.setInterval(foo, 1000);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The mightiest: Functions</h2>
           <h3>Why is this even useful?</h3>
           <pre><code class="language-javascript" data-trim>
 // Remember, we're also an object.
@@ -423,7 +508,7 @@ var foo = function bar(op) {
     // Do more stuff
     return bar;
   };
-  if (op && bar[op]) { // if an op was passed and it exists
+  if (op &amp;&amp; bar[op]) { // if an op was passed and it exists
     return bar[op](); // call it and return the return
   }
   return bar; // Return ourselves
@@ -477,11 +562,12 @@ var Foo = function() {
 Foo.prototype = {
   addBar: function() { this.bar++; }
 };
-var foo = new Foo(); // foo > Foo > Foo.prototype > Object.prototype > null
+var foo = new Foo(); // foo > Foo.prototype > Object.prototype > null
 foo.addBar();
 foo.bar; // 1
 Object.getPrototypeOf(foo).bar; // undefined
-Object.getPrototypeOf(foo).addBar; // function() { this.bar++; }
+Foo.prototype.meh = 'lol';
+foo.meh; // 'lol'
           </code></pre>
         </section>
 
@@ -497,11 +583,14 @@ var Bar = function() {
   this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
 };
 Bar.prototype = new Foo(); // Set Bar's prototype to new instance of Foo
-var foo = new Foo();
-var bar = new Bar(); // bar > Bar > Foo > Foo.prototype > Object.prototype > null
+var foo = new Foo(); // Foo.prototype is essentially an empty object
+var bar = new Bar(); // bar > Bar.prototype (Foo) > Foo.prototype ({}) > Object.prototype > null
 bar.addBar(7); // 7
 foo.addBar(7); // 1
 bar.bar; // 7
+Bar.prototype.meh = 'lol';
+bar.meh; // 'lol'
+foo.meh; // undefined
           </code></pre>
         </section>
 
@@ -523,6 +612,135 @@ Bar.prototype = new Foo();
 var foo = new Foo();
 var bar = new Bar();
 bar.callSuper('addBar', 7); // 1
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Who wants constructors anyway?</h2>
+          <h3>Keeping things light</h3>
+          <pre><code class="language-javascript" data-trim>
+function create(parent) { // aka "justMakeMeAChildAlready"
+  var Constructor = function () {}; // Empty constructor function
+  Constructor.prototype = parent; // Attach prototype object
+  // Return new instance, inheriting from parent
+  return new Constructor();
+}
+var a = { foo: 'lol' };
+var b = create(a);
+b.foo; // 'lol'
+a.bar = 'baz';
+b.bar; // 'baz'
+b.meh = 'nope';
+a.meh; // undefined
+          </code></pre>
+        </section>
+
+        <section>
+          <section>
+            <h2>Enter: Object.create</h2>
+            <h3>Syntax</h3>
+            <pre><code class="language-javascript" data-trim>
+  Object.create(proto /*[, props ]*/)
+            </code></pre>
+            <h3>Summary</h3>
+            <p>The <strong>Object.create()</strong> method creates a new object with the specified prototype object and properties.</p>
+            <h4>Arguments</h4>
+            <p><em>proto</em>: The object which should be the prototype of the newly-created object.</p>
+            <p><em>props</em>: An object whose enumerable own properties specify property descriptors to be added to the newly-created object, with the corresponding property names.</p>
+          </section>
+          <section>
+            <h2>Enter: Object.create</h2>
+            <h3>Polyfill (IE<9)</h3>
+            <pre><code class="language-javascript" data-trim>
+if (typeof Object.create != 'function') {
+    (function () {
+        var F = function () {};
+        Object.create = function (o) {
+            if (arguments.length > 1) { throw Error('Second argument not supported');}
+            if (o === null) { throw Error('Cannot set a null [[Prototype]]');}
+            if (typeof o != 'object') { throw TypeError('Argument must be an object');}
+            F.prototype = o;
+            return new F();
+        };
+    })();
+}
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2>In the wild!</h2>
+          <h3>From BackBone source:</h3>
+          <pre><code class="language-javascript" data-trim>
+var extend = function(protoProps, staticProps) {
+  var parent = this;
+  var child;
+  if (protoProps &amp;&amp; _.has(protoProps, 'constructor')) {
+    child = protoProps.constructor;
+  } else {
+    child = function(){ return parent.apply(this, arguments); };
+  }
+  _.extend(child, parent, staticProps);
+  var Surrogate = function(){ this.constructor = child; };
+  Surrogate.prototype = parent.prototype;
+  child.prototype = new Surrogate;
+  if (protoProps) _.extend(child.prototype, protoProps);
+  child.__super__ = parent.prototype;
+  return child;
+};
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The DOM</h2>
+          <h3>Object with god-complexes</h3>
+          <ul>
+            <li>Object-tree representation of entire document</li>
+            <li>Contains and exposes most of the APIs we use</li>
+            <li>Used to be really, really, really annoying, now just really really</li>
+            <li>Traversing this mess is the main purpose of libraries like jQuery</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Traversal</h2>
+          <h3>All the nesting!</h3>
+          <pre><code class="language-javascript" data-trim>
+// [ &lt;html element> ]
+document.children;
+
+// [ &lt;head element>, &lt;body element> ]
+document.children[0].children;
+
+// [ &lt;element with class someClass>, &lt;...> ]
+document.getElementsByClassName('someClass');
+
+// equivalent
+document.querySelectorAll('.someClass');
+          </code></pre>
+
+        </section>
+
+        <section>
+          <h2>Caution!</h2>
+          <p>As mentioned before, array-like does not mean it's an array.</p>
+          <pre><code class="language-javascript" data-trim>
+var foo = document.querySelectorAll('.foo');
+foo.forEach; // undefined - does not have array method.
+// Invoke array method in the context of our collection.
+Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
+  console.log(el); // logs out each element separately.
+});
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3>Bubbles!</h3>
+          <pre><code class="language-javascript" data-trim>
+var looper = function(el) { // anon func from before
+  console.log(el); // logs out each element separately.
+};
           </code></pre>
         </section>
 
