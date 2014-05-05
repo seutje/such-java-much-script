@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Events: Delagating</title>
+    <style>
+      body { border: 2px solid red; padding: 20px;}
+      form { border: 2px solid green;}
+      button { border: 2px solid blue;}
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><a class="foo" href="#">Click me!</a></li>
+      <li><a class="nope" href="#">Not me!</a></li>
+    </ul>
+    <script>
+    (function(window) {
+      // Handler that calls preventDefault on the event.
+      var handler = function(e) {
+            if (e.target.className === 'foo') {
+              e.preventDefault();
+              window.alert('bingo!');
+            }
+          };
+      // Little toggler, using scoped toggler variable.
+      window.document.body.addEventListener('click', handler);
+    })(this);
+    </script>
+  </body>
+</html>

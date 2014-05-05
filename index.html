@@ -723,6 +723,30 @@ document.querySelectorAll('.someClass');
 
         <section>
           <h2>Caution!</h2>
+          <h3>Document ready</h3>
+          <p>Remember: You cannot query for an element if it hasn't been parsed yet. Place scripts at the bottom or use things like jQuery's <code>$(document).ready(function() { ... })</code></p>
+          <pre><code class="language-html" data-trim>
+&lt;html>
+  &lt;head>
+    &lt;script>
+      //TypeError: Cannot read property 'querySelector' of null
+      var foo = document.body.querySelector('.foo');
+    &lt;/script>
+  &lt;/head>
+  &lt;body>
+    &lt;div class="foo">foo&lt;/div>
+    &lt;script>
+      // Works fine
+      var foo = document.body.querySelector('.foo');
+    &lt;/script>
+  &lt;/body>
+&lt;/html>
+          </code></pre>
+
+        </section>
+
+        <section>
+          <h2>Caution!</h2>
           <p>As mentioned before, array-like does not mean it's an array.</p>
           <pre><code class="language-javascript" data-trim>
 var foo = document.querySelectorAll('.foo');
@@ -736,12 +760,77 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
 
         <section>
           <h2>The driver of it all: Events</h2>
-          <h3>Bubbles!</h3>
+          <h3><a href="/events.html" target="_blank">Bubbles!</a></h3>
           <pre><code class="language-javascript" data-trim>
-var looper = function(el) { // anon func from before
-  console.log(el); // logs out each element separately.
-};
+(function(window) {
+  // Define a handler for our events.
+  var handler = function(event) { console.log(this, event.target); },
+      body = window.document.body, // Cache some element references.
+      form = body.querySelector('form'),
+      button = form.querySelector('input[type="button"]');
+  // Add our event listener to the cached references.
+  body.addEventListener('click', handler);
+  form.addEventListener('click', handler);
+  button.addEventListener('click', handler);
+})(this);
           </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3><a href="/stopPropagation.html" target="_blank">Event methods: stopPropagation!</a></h3>
+          <pre><code class="language-javascript" data-trim>
+(function(window) {
+  // Handler that calls stopPropagation on the event.
+  var handler = function(event) {
+        console.log(this, event.target);
+        event.stopPropagation();
+      },
+      body = window.document.body, // Cache some element references.
+      form = body.querySelector('form'),
+      button = form.querySelector('input[type="submit"]');
+  // Add our event listener to the cached references.
+  body.addEventListener('click', handler);
+  form.addEventListener('click', handler);
+  button.addEventListener('click', handler);
+})(this);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3><a href="/preventDefault.html" target="_blank">Event methods: preventDefault!</a></h3>
+          <pre><code class="language-javascript" data-trim>
+(function(window) {
+  // Handler that calls preventDefault on the event.
+  var handler = function(event) {
+        event.preventDefault();
+      },
+      form = window.document.body.querySelector('form');
+  // The handler will effectively prevent
+  // the native submit event from happening.
+  form.addEventListener('submit', handler);
+})(this);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3><a href="/delegating.html" target="_blank">Advanced techniques: Delegating!</a></h3>
+          <pre><code class="language-javascript" data-trim>
+(function(window) {
+  var handler = function(e) {
+        // Only act if the actual target is '.foo'
+        if (e.target.className = 'foo') {
+          event.preventDefault();
+          console.log('Do something!');
+        }
+      };
+  // Attach the handler to the entire body element.
+  window.document.body.addEventListener('click', handler);
+})(this);
+          </code></pre>
+          <p>Like jQuery's <code>$.fn.on()</code>, <code>$.fn.delegate</code>, ...</p>
         </section>
 
         <!-- Example of nested vertical slides -->

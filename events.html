@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Events</title>
+    <style>
+      body { border: 2px solid red; padding: 20px;}
+      form { border: 2px solid green;}
+      button { border: 2px solid blue;}
+    </style>
+  </head>
+  <body>
+
+    <form>
+      <input type="button" value="click me!" />
+    </form>
+    <script>
+    (function(window) {
+      var handler = function(event) { console.log(this, event.target) },
+          body = window.document.body,
+          form = body.querySelector('form'),
+          button = form.querySelector('input[type="button"]');
+      body.addEventListener('click', handler);
+      form.addEventListener('click', handler);
+      button.addEventListener('click', handler);
+    })(this);
+    </script>
+  </body>
+</html>

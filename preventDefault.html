@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Events: preventDefault</title>
+    <style>
+      body { border: 2px solid red; padding: 20px;}
+      form { border: 2px solid green;}
+      button { border: 2px solid blue;}
+    </style>
+  </head>
+  <body>
+
+    <form method="POST" action="/">
+      <input type="submit" value="click me!" />
+    </form>
+    <a class="toggle" href="#">toggle preventDefault();</a>
+    <script>
+    (function(window) {
+      // Handler that calls preventDefault on the event.
+      var handler = function(event) {
+            if (toggler) {
+              event.preventDefault();
+            }
+          },
+          form = window.document.body.querySelector('form'),
+          toggler = true;
+      // The handler will effectively prevent the native submit event from happening.
+      form.addEventListener('submit', handler);
+      // Little toggler, using scoped toggler variable.
+      window.document.body.querySelector('.toggle').addEventListener('click', function(e) {
+        toggler = !toggler;
+      })
+    })(this);
+    </script>
+  </body>
+</html>
