@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>reveal.js - The HTML Presentation Framework</title>
+    <title>I've got NaNtyNaN problems, but 'this' !== 1</title>
 
     <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
     <meta name="author" content="Hakim El Hattab">
@@ -43,10 +43,10 @@
       <!-- Any section element inside of this container is displayed as a slide -->
       <div class="slides">
         <section>
-          <h1>Such Java,<br>Much Script</h1>
-          <h3>An introduction to JavaScript</h3>
+          <h1>NaNtyNaN problems,<br>but 'this' !== 1</h1>
+          <h3><a>An introduction to JavaScript</a></h3>
           <p>
-            <small>Created by <a href="http://twitter.com/seutje">@seutje</a></small>
+            <small><a href="http://twitter.com/seutje">@seutje</a></small>
           </p>
         </section>
 
@@ -56,7 +56,7 @@
               <li>Steve De Jonghe</li>
               <li>Intertubes plumber @ <a href="http://wunderkraut.com">Wunderkraut</a> <a href="http://wunderkraut.be">Belgium</a> (Antwerp office)</li>
               <li><a href="http://lmgtfy.com/?q=seutje">seutje</a></li>
-              <li>IRC #drupal-contribute #jQuery</li>
+              <li>many supports: IRC #jQuery</li>
               <li>Drupal Core 7 &amp; 8</li>
               <li>JavaScript component<br><a href="http://drupal.org/user/598310">Théodore Biadala</a> &amp; <a href="http://drupal.org/user/748566">Jesse Beach</a></li>
           </ul>
@@ -64,6 +64,24 @@
           <aside class="notes">
             Point out minimal core involvement.
           </aside>
+        </section>
+
+        <section>
+          <h2>Preface</h2>
+          <h3>Tooling</h3>
+          <ul>
+            <li>The browser is your #1 tool for writing JavaScript:
+              <ul>
+                <li>Fully fledged IDE with all the debugging tools you could possible want</li>
+                <li>Allows conditional breakpoint</li>
+                <li>Allows breaking on things non-code (subtree modification, etc)</li>
+                <li>Allows swapping remote files with locals ones at-runtime</li>
+                <li>Allows beautifying production code</li>
+                <li><a href="https://getfirebug.com/wiki/index.php/Console_API" target="_blank">Console API</a></li>
+                <li>much, much more! (checkout "the breakpoint" on youtube or every talk by Paul Irish, ever)</li>
+              </ul>
+            </li>
+          </ul>
         </section>
 
         <section>
@@ -699,6 +717,7 @@ var extend = function(protoProps, staticProps) {
             <li>Contains and exposes most of the APIs we use</li>
             <li>Used to be really, really, really annoying, now just really really</li>
             <li>Traversing this mess is the main purpose of libraries like jQuery</li>
+            <li>Manipulations (and some getters, even) are costly and should be kept to a minimum.</li>
           </ul>
         </section>
 
@@ -762,7 +781,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
           <h2>The driver of it all: Events</h2>
           <h3><a href="/events.html" target="_blank">Bubbles!</a></h3>
           <pre><code class="language-javascript" data-trim>
-(function(window) {
   // Define a handler for our events.
   var handler = function(event) { console.log(this, event.target); },
       body = window.document.body, // Cache some element references.
@@ -772,7 +790,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
   body.addEventListener('click', handler);
   form.addEventListener('click', handler);
   button.addEventListener('click', handler);
-})(this);
           </code></pre>
         </section>
 
@@ -780,7 +797,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
           <h2>The driver of it all: Events</h2>
           <h3><a href="/stopPropagation.html" target="_blank">Event methods: stopPropagation!</a></h3>
           <pre><code class="language-javascript" data-trim>
-(function(window) {
   // Handler that calls stopPropagation on the event.
   var handler = function(event) {
         console.log(this, event.target);
@@ -793,7 +809,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
   body.addEventListener('click', handler);
   form.addEventListener('click', handler);
   button.addEventListener('click', handler);
-})(this);
           </code></pre>
         </section>
 
@@ -801,7 +816,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
           <h2>The driver of it all: Events</h2>
           <h3><a href="/preventDefault.html" target="_blank">Event methods: preventDefault!</a></h3>
           <pre><code class="language-javascript" data-trim>
-(function(window) {
   // Handler that calls preventDefault on the event.
   var handler = function(event) {
         event.preventDefault();
@@ -810,7 +824,6 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
   // The handler will effectively prevent
   // the native submit event from happening.
   form.addEventListener('submit', handler);
-})(this);
           </code></pre>
         </section>
 
@@ -831,6 +844,114 @@ Array.prototype.forEach.call(foo, function(el) { // Pass in anonymous function
 })(this);
           </code></pre>
           <p>Like jQuery's <code>$.fn.on()</code>, <code>$.fn.delegate</code>, ...</p>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3>All the async!</h3>
+          <pre><code class="language-javascript" data-trim>
+// Bad:
+var data = $.get('some/url', function(data) {
+  return data;
+});
+console.log(data); // XMLHttpRequest object o.O
+// Instead:
+$.get('some/url', function(data) {
+  console.log(data);
+});
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3>But what if I need it?</h3>
+          <pre><code class="language-javascript" data-trim>
+(function($) {
+  // initialize returnData in this scope
+  var returnData,
+      // Example function to shout out the data
+      shoutOut = function() {
+        if (data) {
+          console.log(data);
+        }
+      };
+  // Grab the data, assign the variable and call the function.
+  $.get('some/url', function(data) {
+    returnData = data;
+    shoutOut();
+  });
+})(jQuery)
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The driver of it all: Events</h2>
+          <h3>What is actually going on?</h3>
+          <pre><code class="language-javascript" data-trim>
+var callback = function() { /* do something*/ };
+$.get('some/url', callback);
+          </code></pre>
+          <p>What goes on internally:</p>
+          <ul>
+            <li>Reference to callback function is stored.</li>
+            <li>XMLHttpRequest is made and stored for reference.</li>
+            <li>Time passes, interpreter continues to interpret.</li>
+            <li>If successfull -> callback.apply(XMLHttpRequest, [ data, textStatus, XMLHttpRequest])</li>
+            <li>When $.get is called, it immediately returns the XMLHttpRequest object.</li>
+          </ul>
+        </section>
+
+        <section>
+          <section>
+            <h2>Bonus!</h2>
+            <h3>Monkey-patching/duck-punching</h3>
+            <pre><code class="language-javascript" data-trim>
+  // Probably the most annoying piece of JS in Drupal 7
+  Drupal.jsAC.prototype.hidePopup = function(keycode) {
+      /* hidden some irrelevant stuff */
+      // Hide popup.
+      var popup = this.popup;
+      if (popup) {
+          this.popup = null;
+          $(popup).fadeOut('fast', function() {
+              $(popup).remove(); // &lt;- doesn't hide, but actually removes!
+          });
+      }
+      this.selected = false;
+      $(this.ariaLive).empty();
+  };
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Bonus!</h2>
+            <h3>Monkey-patching/duck-punching</h3>
+            <pre><code class="language-javascript" data-trim>
+// Remember, a function is just a variable holding a reference
+// We can just change the reference to point to something else
+Drupal.jsAC.prototype.hidePopup = function() { /* do nothing */ }
+// Now it won't disappear and we can theme it!
+            </code></pre>
+          </section>
+        </section>
+
+          <section>
+            <h2>Bonus!</h2>
+            <h3>Monkey-patching/duck-punching</h3>
+            <pre><code class="language-javascript" data-trim>
+// But what if we still wanna use the original?
+(function(window){
+  // Scope a reference!
+  var _alert = window.alert;
+  window.alert = function (arg) {
+    // Do some extra stuff
+    console.log('Alert called!', arg);
+    // Call the original function with proper arguments and "this" context
+    _alert.call(this, arg);
+  }
+})(this)
+            </code></pre>
+          </section>
         </section>
 
         <!-- Example of nested vertical slides -->
@@ -1141,7 +1262,8 @@ function linkify( selector ) {
         history: true,
         center: true,
 
-        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        //theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        theme: 'simple',
         transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
         // Parallax scrolling
