@@ -78,7 +78,7 @@
                 <li>Allows swapping remote files with locals ones at-runtime</li>
                 <li>Allows beautifying production code</li>
                 <li><a href="https://getfirebug.com/wiki/index.php/Console_API" target="_blank">Console API</a></li>
-                <li>much, much more! (checkout "the breakpoint" on youtube or every talk by Paul Irish, ever)</li>
+                <li>much, much more! (checkout "the breakpoint" on the YouTubes or any talk by Paul Irish, ever)</li>
               </ul>
             </li>
           </ul>
@@ -94,7 +94,7 @@
           <ul class="bare">
             <li>null</li>
             <li>undefined</li>
-            <li>number (double precision floating point)</li>
+            <li>number</li>
             <li>boolean</li>
             <li>string</li>
           </ul>
@@ -108,18 +108,22 @@
             <li>All the rest are essentially extended Objects (Array, Date, etc.) and are passed by reference.</li>
             <li>Use literal notation where possible, avoid using new keyword on base types</li>
           </ul>
-          <pre><code class="language-javascript" data-trim>var foo = 'foo'; // "string" - Good
+          <pre><code class="language-javascript" data-trim>
+var foo = 'foo'; // "string" - Good
 var foo = String('foo'); // "string" - Bad
 var foo = new String('foo'); // "object" - Bad
-var foo = (new String('foo')).valueOf(); // "string" - Bad</code></pre>
+var foo = (new String('foo')).valueOf(); // "string" - Bad
+          </code></pre>
         </section>
 
         <section>
           <h2>Cautionary note on typeof</h2>
           <p>It lies!</p>
-          <pre><code class="language-javascript" data-trim>typeof null; // "object"
+          <pre><code class="language-javascript" data-trim>
+typeof null; // "object"
 typeof []; // "object"
-typeof /regex/; // "function" in some browsers</code></pre>
+typeof /regex/; // "function" in some browsers
+          </code></pre>
         </section>
 
         <section>
@@ -127,9 +131,11 @@ typeof /regex/; // "function" in some browsers</code></pre>
           <p>
             Abuse the Object.toString method!
           </p>
-          <pre><code class="language-javascript" data-trim>Object.prototype.toString.call(null); // "[object Null]"
+          <pre><code class="language-javascript" data-trim>
+Object.prototype.toString.call(null); // "[object Null]"
 Object.prototype.toString.call([]); // "[object Array]"
-Object.prototype.toString.call(/regex/); // "[object RegExp]"</code></pre>
+Object.prototype.toString.call(/regex/); // "[object RegExp]"
+          </code></pre>
           <p>(More on prototypes and function methods later!)</p>
           <aside class="notes">
             <p><small>If you need this, you probably have a bigger problem.</small></p>
@@ -143,7 +149,7 @@ Object.prototype.toString.call(/regex/); // "[object RegExp]"</code></pre>
             <li>don't care about precision?
               <ul>
                 <li>.toFixed() to determine float precision<br><pre><code class="language-javascript">(0.2 + 0.2 + 0.2).toFixed(2); // 0.60</code></pre></li>
-                <li>parseInt() with a radix<br><pre><code class="language-javascript">parseInt(42.123456789, 10); // 42</code></pre></li>
+                <li>parseInt() with a radix<br><pre><code class="language-javascript">parseInt(42.56789, 10); // 42(!)</code></pre></li>
               </ul>
             </li>
             <li>Working with currency? Do everything in cents or use a library to provide <a href="https://github.com/MikeMcl/big.js">bigger decimals with arbitraty precision</a></li>
@@ -223,7 +229,7 @@ foo.lol; // 'lol'
           <h2>Truthy fruity</h2>
           <h3>Shortcuts</h3>
           <pre><code class="language-javascript" data-trim>
-// someInit will not be executed if someVar is falsy
+// someInit will not be executed unless someVar is falsy
 var foo = someVar || someInit();
 // Useful for defaults!
 var bar = function (x) {
