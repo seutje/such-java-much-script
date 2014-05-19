@@ -362,8 +362,11 @@ bar; // "I will!"
           <h3>Why is this useful?</h3>
           <pre><code class="language-javascript" data-trim>
 (function(window){
+  // Scoped variable.
   var myLittlePrivate = 'foo';
+  // Intentionally leaked getter function to the global scope.
   window.getPrivate = function() {
+    // function is defined within same scope so it can access the var
     return myLittlePrivate;
   };
 })(this);
@@ -430,11 +433,12 @@ bar(); // undefined
 var foo = function() {
   return this;
 }
-
+// Create a clone of the function with a fixed context of 'bar!'.
 var bar = foo.bind('bar!');
 
 foo(); // returns reference to the window object.
 bar(); // 'bar!'
+// Call foo in the context of 'lol'
 foo.call('lol'/* , arg1, arg2 */); // 'lol'
 foo.apply('lol'/* , [arg1, arg2] */); // 'lol'
           </code></pre>
@@ -992,7 +996,7 @@ Drupal.jsAC.prototype.hidePopup = function() { /* do nothing */ }
         center: true,
 
         //theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        theme: 'simple',
+        theme: 'beige',
         transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
         // Parallax scrolling
