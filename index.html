@@ -363,15 +363,15 @@ bar; // "I will!"
           <pre><code class="language-javascript" data-trim>
 (function(window){
   // Scoped variable.
-  var myLittlePrivate = 'foo';
+  var myPrivate = 'foo';
   // Intentionally leaked getter function to the global scope.
   window.getPrivate = function() {
     // function is defined within same scope so it can access the var
-    return myLittlePrivate;
+    return myPrivate;
   };
 })(this);
 getPrivate(); // 'foo'
-myLittlePrivate; // ReferenceError: myLittlePrivate is not defined
+myPrivate; // ReferenceError: myPrivate is not defined
           </code></pre>
         </section>
 
