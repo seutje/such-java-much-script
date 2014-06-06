@@ -379,12 +379,12 @@ myPrivate; // ReferenceError: myPrivate is not defined
           <h2>The mightiest: Function</h2>
           <h3>Can return functions</h3>
           <pre><code class="language-javascript" data-trim>
-function multiply (x) {
+function compute (x) {
   return function (y) {
     return x*y;
   }
 }
-multiply(2)(3); // 6
+compute(2)(3); // 6
           </code></pre>
         </section>
 
@@ -394,7 +394,7 @@ multiply(2)(3); // 6
           <pre><code class="language-javascript" data-trim>
 function maths(x) {
   return {
-    multiply: function(y) {
+    compute: function(y) {
       return x * y;
     },
     add: function(y) {
@@ -403,7 +403,7 @@ function maths(x) {
     abs: Math.abs(x)
   }
 }
-maths(2).multiply(3); // 6
+maths(2).compute(3); // 6
 maths(2).add(3); // 5
 maths(-2).abs; // 2
           </code></pre>
