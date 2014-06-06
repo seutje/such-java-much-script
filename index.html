@@ -647,7 +647,7 @@ bar.callSuper('addBar', 7); // 1
           <h2>Who wants constructors anyway?</h2>
           <h3>Keeping things light</h3>
           <pre><code class="language-javascript" data-trim>
-function create(parent) { // aka "justMakeMeAChildAlready"
+function create(parent) { // aka "justMakeMeAnObjectThatInheritsFromThis"
   var Constructor = function () {}; // Empty constructor function
   Constructor.prototype = parent; // Attach prototype object
   // Return new instance, inheriting from parent
