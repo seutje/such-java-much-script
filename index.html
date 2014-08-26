@@ -46,7 +46,7 @@
           <h1>Such Java,<br>Much Script!</h1>
           <h3><a>An introduction to JavaScript</a></h3>
           <p>
-            <small><a href="http://twitter.com/seutje">@seutje</a></small>
+            <small>Steve De Jonghe</small>
           </p>
         </section>
 
@@ -55,7 +55,6 @@
           <ul class="bare">
               <li>Steve De Jonghe</li>
               <li>Intertubes plumber @ <a href="http://wunderkraut.com">Wunderkraut</a> <a href="http://wunderkraut.be">Belgium</a> (Antwerp office)</li>
-              <li><a href="http://lmgtfy.com/?q=seutje">seutje</a></li>
           </ul>
         </section>
 
@@ -76,21 +75,34 @@
         </section>
 
         <section>
-          <h2>Preface</h2>
-          <h3>Tooling</h3>
-          <ul>
-            <li>The browser is your #1 tool for writing JavaScript:
-              <ul>
-                <li>Fully fledged IDE with all the debugging tools you could possible want</li>
-                <li>Allows conditional breakpoint</li>
-                <li>Allows breaking on things non-code (subtree modification, etc)</li>
-                <li>Allows <a href="https://chrome.google.com/webstore/detail/custom-redirects/kekdllcidamgebonidegjekidhdihdli/" title="Chrome custom redirects">swapping remote files</a> with locals ones at-runtime</li>
-                <li>Allows beautifying production code</li>
-                <li><a href="https://getfirebug.com/wiki/index.php/Console_API" target="_blank">Console API</a></li>
-                <li>much, much more! (checkout "the breakpoint" on the YouTubes or any talk by Paul Irish, ever)</li>
-              </ul>
-            </li>
-          </ul>
+          <section>
+            <h2>Preface</h2>
+          </section>
+          <section>
+            <h2>Preface</h2>
+            <h3>Tooling</h3>
+            <ul>
+              <li>The browser is your #1 tool for writing JavaScript:
+                <ul>
+                  <li>Fully fledged IDE with all the debugging tools you could possible want</li>
+                  <li>Allows conditional breakpoint</li>
+                  <li>Allows breaking on things non-code (subtree modification, etc)</li>
+                  <li>Allows <a href="https://chrome.google.com/webstore/detail/custom-redirects/kekdllcidamgebonidegjekidhdihdli/" title="Chrome custom redirects">swapping remote files</a> with locals ones at-runtime</li>
+                  <li>Allows beautifying production code</li>
+                  <li><a href="https://getfirebug.com/wiki/index.php/Console_API" target="_blank">Console API</a></li>
+                  <li>much, much more! (like <a href="https://www.youtube.com/watch?v=ktwJ-EDiZoU&list=PLVUliVBcvz1n_DOgB4lb06G_Dc5fQVRRv">The Breakpoint</a>)</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Preface</h2>
+            <h3>Error prevention</h3>
+            <ul>
+              <li>The linter is you friend!</li>
+              <li>No, seriously, it will tell you to use semicolons and ===</li>
+            </ul>
+          </section>
         </section>
 
         <section>
@@ -100,13 +112,14 @@
           </section>
 
           <section>
-            <h2>Everything is an object, except primitives:</h2>
+            <h2>Everything is an object, except <a href="https://developer.mozilla.org/en-US/docs/Glossary/Primitive">primitives</a>:</h2>
             <ul class="bare">
-              <li>null</li>
-              <li>undefined</li>
-              <li>number</li>
-              <li>boolean</li>
-              <li>string</li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Null">null</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/undefined">undefined</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Number">number</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Boolean">boolean</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/String">string</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Symbol">(symbol)</a></li>
             </ul>
           </section>
 
@@ -116,35 +129,35 @@
               <li>Primitives cannot be broken down to an extended type and have no properties of their own (few exceptions like strings).</li>
               <li>Primitives are not passed by reference.</li>
               <li>All the rest are essentially extended Objects (Array, Date, etc.) and are passed by reference.</li>
-              <li>Use literal notation where possible, avoid using new keyword on base types</li>
+              <li>Use literal notation where possible, avoid using new keyword on base type object wrappers</li>
             </ul>
             <pre><code class="language-javascript" data-trim>
-  var foo = 'foo'; // "string" - Good
-  var foo = String('foo'); // "string" - Bad
-  var foo = new String('foo'); // "object" - Bad
-  var foo = (new String('foo')).valueOf(); // "string" - Bad
+typeof 'foo'; // "string" - Good
+typeof String('foo'); // "string" - Bad
+typeof new String('foo'); // "object" - Bad
+typeof (new String('foo')).valueOf(); // "string" - Bad
             </code></pre>
           </section>
 
           <section>
-            <h2>Cautionary note on typeof</h2>
+            <h2>Cautionary note on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">typeof</a></h2>
             <p>It lies!</p>
             <pre><code class="language-javascript" data-trim>
-  typeof null; // "object"
-  typeof []; // "object"
-  typeof /regex/; // "function" in some browsers
+typeof null; // "object"
+typeof []; // "object"
+typeof /regex/; // "function" in some browsers
             </code></pre>
           </section>
 
           <section>
             <h2>Dead set on matching the type?</h2>
             <p>
-              Force the Object.toString method to do your bidding!
+              Force the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString">Object.toString</a> method to do your bidding!
             </p>
             <pre><code class="language-javascript" data-trim>
-  Object.prototype.toString.call(null); // "[object Null]"
-  Object.prototype.toString.call([]); // "[object Array]"
-  Object.prototype.toString.call(/regex/); // "[object RegExp]"
+Object.prototype.toString.call(null); // "[object Null]"
+Object.prototype.toString.call([]); // "[object Array]"
+Object.prototype.toString.call(/regex/); // "[object RegExp]"
             </code></pre>
             <p>(More on prototypes and function methods later!)</p>
             <aside class="notes">
@@ -158,11 +171,11 @@
               <li>Floating point!<br><pre><code class="language-javascript" data-trim>0.2 + 0.2 + 0.2; // 0.6000000000000001 WAT?!</code></pre></li>
               <li>don't care about precision?
                 <ul>
-                  <li>.toFixed() to determine float precision<br><pre><code class="language-javascript">(0.2 + 0.2 + 0.2).toFixed(2); // 0.60</code></pre></li>
-                  <li>parseInt() with a radix<br><pre><code class="language-javascript">parseInt(42.56789, 10); // 42(!)</code></pre></li>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed">Number.toFixed()</a> to determine float precision<br><pre><code class="language-javascript">(0.2 + 0.2 + 0.2).toFixed(2); // 0.60</code></pre></li>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt">parseInt()</a> with a radix<br><pre><code class="language-javascript">parseInt(42.56789, 10); // 42(!)</code></pre></li>
                 </ul>
               </li>
-              <li>Working with currency? Do everything in cents or use a library to provide <a href="https://github.com/MikeMcl/big.js">bigger decimals with arbitraty precision</a></li>
+              <li>Working with currency? Do everything in cents or use a library to provide <a href="https://github.com/MikeMcl/big.js">bigger decimals with arbitrary precision</a></li>
             </ul>
           </section>
 
@@ -172,34 +185,40 @@
               <li>Not as bad as PHP, but still pretty weird sometimes.</li>
               <li><strong>parseInt() if you want to do maths, always provide radix parameter!</strong>
                 <pre><code class="language-javascript" data-trim>
-  parseInt('042'); // Some browsers will default to octal 66.
-  parseInt('042', 10); // Force parsing as decimal.
-  parseInt('12foo34', 10); // 12 (!)
+parseInt('042'); // Some browsers will default to octal 66.
+parseInt('042', 10); // Force parsing as decimal.
+parseInt('12foo34', 10); // 12 (!)
                 </code></pre>
               </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Bonus!</h2>
+            <ul>
               <li>They can be partially accessed like an array (mainly getters).</li>
             </ul>
             <pre><code class="language-javascript" data-trim>
-  var foo = 'foo';
-  foo[0]; // 'f'
-  foo[0] = 'p'; // Nice try, no setters tho!
-  foo.split('f').join('p'); // 'poo' (like PHPs explode/implode)
-  foo.length; // 3
-  foo.bar = 'baz'; // Nice try, primitives can't have properties tho!
-  foo.bar; // undefined
+var foo = 'foo';
+foo[0]; // 'f'
+foo[0] = 'p'; // Nice try, no setters tho!
+foo.split('f').join('p'); // 'poo' (like PHPs explode/implode)
+foo.length; // 3
+foo.bar = 'baz'; // Nice try, primitives can't have properties tho!
+foo.bar; // undefined
             </code></pre>
-            <p>This is often referred to as "<em>Array-like</em>" (again, string are actually a bit of an exception here), but should not be considered a fully-fledged array.</p>
+            <p>This is often referred to as "<em>Array-like</em>", but should not be considered a fully-fledged array.</p>
           </section>
 
           <section>
             <h2>Bonus!</h2>
             <pre><code class="language-javascript" data-trim>
-  var foo = new String('foo');
-  // Secretly an object wrapper pretending to be a string
-  foo === 'foo'; // false
-  foo == 'foo'; // true
-  foo.lol = 'lol'; // now it actually sticks!
-  foo.lol; // 'lol'
+var foo = new String('foo');
+// Secretly an object wrapper pretending to be a string
+foo === 'foo'; // false
+foo == 'foo'; // true
+foo.lol = 'lol'; // now it actually sticks!
+foo.lol; // 'lol'
             </code></pre>
           </section>
         </section>
@@ -210,13 +229,13 @@
             <h3>The operator matters!</h3>
             <p>With strings and numbers, the + operator will coerce everything to strings</p>
             <pre><code class="language-javascript" data-trim>
-  '123' + 4; // '1234'
-  1 + '234'; // '1234'
+'123' + 4; // '1234'
+1 + '234'; // '1234'
             </code></pre>
             <p>Likewise, the - operator will coerce everything to a number</p>
             <pre><code class="language-javascript" data-trim>
-  '123' - 4; // 119
-  1 - '234' ; // -233
+'123' - 4; // 119
+1 - '234' ; // -233
             </code></pre>
           </section>
 
@@ -225,8 +244,8 @@
             <h3>cheap casting!</h3>
             <p>Using the unary + operator, we can easily cast to a number</p>
             <pre><code class="language-javascript" data-trim>
-  '1.23' + '1.23'; // '1.231.23'
-  (+'1.23') + (+'1.23'); // 2.46 (parens optional)
+'1.23' + '1.23'; // '1.231.23'
+(+'1.23') + (+'1.23'); // 2.46 (parens optional)
             </code></pre>
             <p>This does not save you from <code>NaN</code>ty<code>NaN</code> problems though, always check user input!</p>
           </section>
@@ -241,12 +260,12 @@
             <h2>Truthy falsy</h2>
             <h3>Shortcuts</h3>
             <pre><code class="language-javascript" data-trim>
-  // someInit will not be executed unless someVar is falsy
-  var foo = someVar || someInit();
-  // Useful for defaults!
-  var bar = function (x) {
-    x = x || myDefaults;
-  };
+// someInit will not be executed unless someVar is falsy
+var foo = someVar || someInit();
+// Useful for defaults!
+var bar = function (x) {
+  x = x || myDefaults;
+};
             </code></pre>
           </section>
         </section>
@@ -256,12 +275,12 @@
             <h2>The mighty Array!</h2>
             <ul>
               <li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to show its underling object-like nature.<pre><code class="language-javascript" data-trim>
-  var foo = ['poo'];
-  foo.length; // 1
-  foo.bar = 'bar';
-  foo.length; // 1
-  foo.bar; // 'bar' (foo['bar'] also works)
-  foo; // ['poo']
+var foo = ['poo'];
+foo.length; // 1
+foo.bar = 'bar';
+foo.length; // 1
+foo.bar; // 'bar' (foo['bar'] also works)
+foo; // ['poo']
               </code></pre></li>
               <li>For example: jQuery's $() query returns an array-like object of results that's augmented with properties and methods.</li>
             </ul>
@@ -271,11 +290,11 @@
             <h2>The mighty Array!</h2>
             <ul>
               <li>Avoid manually assigning keys, missing ones will be undefined. Instead, use Array.push().<pre><code class="language-javascript" data-trim>
-  var foo = ['lala', 'hihi'];
-  foo.push('hoho'); // 3 (Array.push returns new length)
-  foo[7] = 'lolapi';
-  foo.length; // 8
-  foo[6]; // undefined
+var foo = ['lala', 'hihi'];
+foo.push('hoho'); // 3 (Array.push returns new length)
+foo[7] = 'lolapi';
+foo.length; // 8
+foo[6]; // undefined
               </code></pre></li>
             </ul>
           </section>
@@ -285,14 +304,14 @@
             <ul>
               <li><strong>Never ever</strong> for...in loop on an array, use a regular for-loop!
                 <pre><code class="language-javascript" data-trim>
-  var foo = ['bar'];
-  foo.lol = 'gotcha!';
-  for (var i in foo) {
-    console.log(foo[i]); // 'bar', 'gotcha!'
-  }
-  for (var i = 0, len = foo.length; i &lt; len; i++) {
-    console.log(foo[i]); // 'bar'
-  }
+var foo = ['bar'];
+foo.lol = 'gotcha!';
+for (var i in foo) {
+  console.log(foo[i]); // 'bar', 'gotcha!'
+}
+for (var i = 0, len = foo.length; i &lt; len; i++) {
+  console.log(foo[i]); // 'bar'
+}
                 </code></pre></li>
             </ul>
           </section>
@@ -320,18 +339,18 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>Creator of scope</h3>
             <pre><code class="language-javascript" data-trim>
-  function foo() {
-    var bar = 'lol';
-  }
-  foo();
-  console.log(bar); // undefined
-            </code></pre>
-            <pre><code class="language-javascript" data-trim>
+function foo() {
   var bar = 'lol';
-  function foo(bar) {
-    return bar;
-  }
-  console.log(foo()); // undefined
+}
+foo();
+console.log(bar); // undefined
+            </code></pre>
+            <pre><code class="language-javascript" data-trim>
+var bar = 'lol';
+function foo(bar) {
+  return bar;
+}
+console.log(foo()); // undefined
             </code></pre>
           </section>
 
@@ -339,20 +358,20 @@ for (var key in foo) {
             <h2>Function: Creates scope</h2>
             <h3>Immediately Invoked Function Expression</h3>
             <pre><code class="language-javascript" data-trim>
-  var x = 'bar';
+var x = 'bar';
 
-  (function (x) {
+(function (x) {
 
-    x === 'foo'; // true
+  x === 'foo'; // true
 
-  })('foo');
+})('foo');
 
-  x === 'bar'; // true
+x === 'bar'; // true
 
-  // Roughly equivalent (without accessible leftovers)
+// Roughly equivalent (without accessible leftovers)
 
-  var foo = function(x) {}
-  foo('foo');
+var foo = function(x) {}
+foo('foo');
             </code></pre>
           </section>
 
@@ -360,16 +379,16 @@ for (var key in foo) {
             <h2>Function: Creates scope</h2>
             <h3>Immediately Invoked Function Expression</h3>
             <pre><code class="language-javascript" data-trim>
-  (function (x, y) {
+(function (x, y) {
 
-    x === 'foo'; // true
-    y === window; // true if in a browser and not hosed outside scope
-    var foo = "I won't leak to the global scope!";
-    y.bar = "I will!"; // same as window.bar
+  x === 'foo'; // true
+  y === window; // true if in a browser and not hosed outside scope
+  var foo = "I won't leak to the global scope!";
+  y.bar = "I will!"; // same as window.bar
 
-  })('foo', this);
-  foo; // undefined
-  bar; // "I will!"
+})('foo', this);
+foo; // undefined
+bar; // "I will!"
             </code></pre>
           </section>
 
@@ -377,17 +396,17 @@ for (var key in foo) {
             <h2>Function: IIFE</h2>
             <h3>Why is this useful?</h3>
             <pre><code class="language-javascript" data-trim>
-  (function(window){
-    // Scoped variable.
-    var myPrivate = 'foo';
-    // Intentionally leaked getter function to the global scope.
-    window.getPrivate = function() {
-      // function is defined within same scope so it can access the var
-      return myPrivate;
-    };
-  })(this);
-  getPrivate(); // 'foo'
-  myPrivate; // ReferenceError: myPrivate is not defined
+(function(window){
+  // Scoped variable.
+  var myPrivate = 'foo';
+  // Intentionally leaked getter function to the global scope.
+  window.getPrivate = function() {
+    // function is defined within same scope so it can access the var
+    return myPrivate;
+  };
+})(this);
+getPrivate(); // 'foo'
+myPrivate; // ReferenceError: myPrivate is not defined
             </code></pre>
           </section>
 
@@ -395,12 +414,12 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>Can return functions</h3>
             <pre><code class="language-javascript" data-trim>
-  function compute (x) {
-    return function (y) {
-      return x*y;
-    }
+function compute (x) {
+  return function (y) {
+    return x*y;
   }
-  compute(2)(3); // 6
+}
+compute(2)(3); // 6
             </code></pre>
           </section>
 
@@ -408,20 +427,20 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>And so much more!</h3>
             <pre><code class="language-javascript" data-trim>
-  function maths(x) {
-    return {
-      compute: function(y) {
-        return x * y;
-      },
-      add: function(y) {
-        return x + y;
-      },
-      abs: Math.abs(x)
-    }
+function maths(x) {
+  return {
+    compute: function(y) {
+      return x * y;
+    },
+    add: function(y) {
+      return x + y;
+    },
+    abs: Math.abs(x)
   }
-  maths(2).compute(3); // 6
-  maths(2).add(3); // 5
-  maths(-2).abs; // 2
+}
+maths(2).compute(3); // 6
+maths(2).add(3); // 5
+maths(-2).abs; // 2
             </code></pre>
           </section>
 
@@ -429,15 +448,15 @@ for (var key in foo) {
             <h2>The mighties: Function</h2>
             <h3>"this" is madness!</h3>
             <pre><code class="language-javascript" data-trim>
-  var foo = {
-    a: 'lol',
-    b: function() {
-      return this.a;
-    }
-  };
-  foo.b(); // 'lol'
-  var bar = foo.b;
-  bar(); // undefined
+var foo = {
+  a: 'lol',
+  b: function() {
+    return this.a;
+  }
+};
+foo.b(); // 'lol'
+var bar = foo.b;
+bar(); // undefined
             </code></pre>
             <p>Here, <code>bar</code> is actually <code>window.bar</code>, so the window object becomes the context, and there is no <code>window.a</code>.</p>
           </section>
@@ -446,17 +465,17 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>Special methods and magic "this"!</h3>
             <pre><code class="language-javascript" data-trim>
-  var foo = function() {
-    return this;
-  }
-  // Create a clone of the function with a fixed context of 'bar!'.
-  var bar = foo.bind('bar!');
+var foo = function() {
+  return this;
+}
+// Create a clone of the function with a fixed context of 'bar!'.
+var bar = foo.bind('bar!');
 
-  foo(); // returns reference to the window object.
-  bar(); // 'bar!'
-  // Call foo in the context of 'lol'
-  foo.call('lol'/* , arg1, arg2 */); // 'lol'
-  foo.apply('lol'/* , [arg1, arg2] */); // 'lol'
+foo(); // returns reference to the window object.
+bar(); // 'bar!'
+// Call foo in the context of 'lol'
+foo.call('lol'/* , arg1, arg2 */); // 'lol'
+foo.apply('lol'/* , [arg1, arg2] */); // 'lol'
             </code></pre>
           </section>
 
@@ -464,16 +483,16 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>So how do I function?</h3>
             <pre><code class="language-javascript" data-trim>
-  // Defined at run-time.
-  foo(); // ReferenceError: foo is not defined
+// Defined at run-time.
+foo(); // ReferenceError: foo is not defined
 
-  var foo = function () {};
+var foo = function () {};
             </code></pre>
             <pre><code class="language-javascript" data-trim>
-  // Defined at parse-time for this block.
-  foo(); // no error
+// Defined at parse-time for this block.
+foo(); // no error
 
-  function foo() {};
+function foo() {};
             </code></pre>
           </section>
 
@@ -481,24 +500,24 @@ for (var key in foo) {
             <h2>The mightiest: Function</h2>
             <h3>What is even going on here?</h3>
             <pre><code class="language-javascript" data-trim>
-  // Essentially an anonymous function stored in a variable.
-  var foo = function () { };
+// Essentially an anonymous function stored in a variable.
+var foo = function () { };
 
-  foo.name; // '' (empty string)
+foo.name; // '' (empty string)
             </code></pre>
             <pre><code class="language-javascript" data-trim>
-  // A named function.
-  function foo() { };
+// A named function.
+function foo() { };
 
-  foo.name; // 'foo'
+foo.name; // 'foo'
             </code></pre>
             <pre><code class="language-javascript" data-trim>
-  // But wait!
-  var foo = function bar() { };
+// But wait!
+var foo = function bar() { };
 
-  foo.name; // 'bar'
-  bar.name; // ReferenceError: bar is not defined
-  // WAT?!
+foo.name; // 'bar'
+bar.name; // ReferenceError: bar is not defined
+// WAT?!
             </code></pre>
           </section>
 
@@ -506,16 +525,16 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Bonus points!</h3>
             <pre><code class="language-javascript" data-trim>
-  // We can return ourselves!
-  var foo = function bar() {
-    // Do some things...
+// We can return ourselves!
+var foo = function bar() {
+  // Do some things...
 
-    return bar;
-  };
+  return bar;
+};
 
-  foo.name; // 'bar'
-  foo().name; // 'bar'
-  foo()()()()()()()(); // ...
+foo.name; // 'bar'
+foo().name; // 'bar'
+foo()()()()()()()(); // ...
             </code></pre>
           </section>
 
@@ -523,17 +542,17 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Callbacks &amp; setTimeout/setInterval</h3>
             <pre><code class="language-javascript" data-trim>
-  // Logs 'HOLAS!' every second.
-  var foo = function() {
-    console.log('HOLAS!');
-    window.setTimeout(foo, 1000);
-  };
+// Logs 'HOLAS!' every second.
+var foo = function() {
+  console.log('HOLAS!');
   window.setTimeout(foo, 1000);
-  // Bad:
-  var foo = function() {
-    console.log('What if I took more than 1 second to run?');
-  };
-  window.setInterval(foo, 1000);
+};
+window.setTimeout(foo, 1000);
+// Bad:
+var foo = function() {
+  console.log('What if I took more than 1 second to run?');
+};
+window.setInterval(foo, 1000);
             </code></pre>
           </section>
 
@@ -541,23 +560,23 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Why is this even useful?</h3>
             <pre><code class="language-javascript" data-trim>
-  // Remember, we're also an object.
-  var foo = function bar(op) {
-    // Do some things...
-    bar.doStuff = function() {
-      // Do stuff
-      return bar;
-    };
-    bar.doMoreStuff = function() {
-      // Do more stuff
-      return bar;
-    };
-    if (op &amp;&amp; bar[op]) { // if an op was passed and it exists
-      return bar[op](); // call it and return the return
-    }
-    return bar; // Return ourselves
+// Remember, we're also an object.
+var foo = function bar(op) {
+  // Do some things...
+  bar.doStuff = function() {
+    // Do stuff
+    return bar;
   };
-  foo().doStuff().doMoreStuff(); // or foo('doStuff')('doMoreStuff')...
+  bar.doMoreStuff = function() {
+    // Do more stuff
+    return bar;
+  };
+  if (op &amp;&amp; bar[op]) { // if an op was passed and it exists
+    return bar[op](); // call it and return the return
+  }
+  return bar; // Return ourselves
+};
+foo().doStuff().doMoreStuff(); // or foo('doStuff')('doMoreStuff')...
             </code></pre>
           </section>
 
@@ -565,16 +584,16 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>But wait!</h3>
             <pre><code class="language-javascript" data-trim>
-  // Same as before.
-  var foo = function bar() {
-    bar.doStuff = function() { return bar; };
-    return bar;
-  };
-  // But now we call the method directly on the object
-  // instead of executing it first.
-  foo.doStuff(); // TypeError: undefined is not a function
-  foo(); // We get the same object function, but now it has methods.
-  foo.doStuff(); // The same global reference now works!
+// Same as before.
+var foo = function bar() {
+  bar.doStuff = function() { return bar; };
+  return bar;
+};
+// But now we call the method directly on the object
+// instead of executing it first.
+foo.doStuff(); // TypeError: undefined is not a function
+foo(); // We get the same object function, but now it has methods.
+foo.doStuff(); // The same global reference now works!
             </code></pre>
           </section>
 
@@ -582,16 +601,16 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>So how do I instance?</h3>
             <pre><code class="language-javascript" data-trim>
-  // Define it as a constructor.
-  function Foo() { // capital is just convention
-    this.bar = function() { return this; };
-  };
-  var one = new Foo(); // Note the "new"
-  var two = new Foo();
-  one === two; // false, they are 2 separate instances
-  one.bar() === two.bar(); // false
-  one.bar() === one; // true
-  one instanceof Foo; // true
+// Define it as a constructor.
+function Foo() { // capital is just convention
+  this.bar = function() { return this; };
+};
+var one = new Foo(); // Note the "new"
+var two = new Foo();
+one === two; // false, they are 2 separate instances
+one.bar() === two.bar(); // false
+one.bar() === one; // true
+one instanceof Foo; // true
             </code></pre>
           </section>
 
@@ -599,19 +618,19 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Inheritance</h3>
             <pre><code class="language-javascript" data-trim>
-  var Foo = function() {
-    this.bar = 0;
-  };
-  // Define its base object.
-  Foo.prototype = {
-    addBar: function() { this.bar++; }
-  };
-  var foo = new Foo(); // foo > Foo.prototype > Object.prototype > null
-  foo.addBar();
-  foo.bar; // 1
-  Object.getPrototypeOf(foo).bar; // undefined
-  Foo.prototype.meh = 'lol';
-  foo.meh; // 'lol'
+var Foo = function() {
+  this.bar = 0;
+};
+// Define its base object.
+Foo.prototype = {
+  addBar: function() { this.bar++; }
+};
+var foo = new Foo(); // foo > Foo.prototype > Object.prototype > null
+foo.addBar();
+foo.bar; // 1
+Object.getPrototypeOf(foo).bar; // undefined
+Foo.prototype.meh = 'lol';
+foo.meh; // 'lol'
             </code></pre>
           </section>
 
@@ -619,22 +638,22 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Inheritance</h3>
             <pre><code class="language-javascript" data-trim>
-  var Foo = function() {
-    this.bar = 0;
-    this.addBar = function() { this.bar++; return this.bar; };
-  };
-  var Bar = function() {
-    this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
-  };
-  Bar.prototype = new Foo(); // Set Bar's prototype to new instance of Foo
-  var foo = new Foo(); // Foo.prototype is essentially an empty object
-  var bar = new Bar(); // bar > Bar.prototype (Foo) > Foo.prototype ({}) > Object.prototype > null
-  bar.addBar(7); // 7
-  foo.addBar(7); // 1
-  bar.bar; // 7
-  Bar.prototype.meh = 'lol';
-  bar.meh; // 'lol'
-  foo.meh; // undefined
+var Foo = function() {
+  this.bar = 0;
+  this.addBar = function() { this.bar++; return this.bar; };
+};
+var Bar = function() {
+  this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
+};
+Bar.prototype = new Foo(); // Set Bar's prototype to new instance of Foo
+var foo = new Foo(); // Foo.prototype is essentially an empty object
+var bar = new Bar(); // bar > Bar.prototype (Foo) > Foo.prototype ({}) > Object.prototype > null
+bar.addBar(7); // 7
+foo.addBar(7); // 1
+bar.bar; // 7
+Bar.prototype.meh = 'lol';
+bar.meh; // 'lol'
+foo.meh; // undefined
             </code></pre>
           </section>
 
@@ -642,20 +661,20 @@ for (var key in foo) {
             <h2>The mightiest: Functions</h2>
             <h3>Inheritance</h3>
             <pre><code class="language-javascript" data-trim>
-  var Foo = function() {
-    this.bar = 0;
-    this.addBar = function() { this.bar++; return this.bar; };
+var Foo = function() {
+  this.bar = 0;
+  this.addBar = function() { this.bar++; return this.bar; };
+};
+var Bar = function() {
+  this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
+  this.callSuper = function(op, arg) {
+    return Object.getPrototypeOf(this)[op].call(this, arg);
   };
-  var Bar = function() {
-    this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
-    this.callSuper = function(op, arg) {
-      return Object.getPrototypeOf(this)[op].call(this, arg);
-    };
-  }
-  Bar.prototype = new Foo();
-  var foo = new Foo();
-  var bar = new Bar();
-  bar.callSuper('addBar', 7); // 1
+}
+Bar.prototype = new Foo();
+var foo = new Foo();
+var bar = new Bar();
+bar.callSuper('addBar', 7); // 1
             </code></pre>
           </section>
 
@@ -663,19 +682,19 @@ for (var key in foo) {
             <h2>Who wants constructors anyway?</h2>
             <h3>Keeping things light</h3>
             <pre><code class="language-javascript" data-trim>
-  function create(parent) { // aka "justMakeMeAnObjectThatInheritsFromThis"
-    var Constructor = function () {}; // Empty constructor function
-    Constructor.prototype = parent; // Attach prototype object
-    // Return new instance, inheriting from parent
-    return new Constructor();
-  }
-  var a = { foo: 'lol' };
-  var b = create(a);
-  b.foo; // 'lol'
-  a.bar = 'baz';
-  b.bar; // 'baz'
-  b.meh = 'nope';
-  a.meh; // undefined
+function create(parent) { // aka "justMakeMeAnObjectThatInheritsFromThis"
+  var Constructor = function () {}; // Empty constructor function
+  Constructor.prototype = parent; // Attach prototype object
+  // Return new instance, inheriting from parent
+  return new Constructor();
+}
+var a = { foo: 'lol' };
+var b = create(a);
+b.foo; // 'lol'
+a.bar = 'baz';
+b.bar; // 'baz'
+b.meh = 'nope';
+a.meh; // undefined
             </code></pre>
           </section>
         </section>
@@ -685,7 +704,7 @@ for (var key in foo) {
             <h2>Enter: Object.create</h2>
             <h3>Syntax</h3>
             <pre><code class="language-javascript" data-trim>
-  Object.create(proto /*[, props ]*/)
+Object.create(proto /*[, props ]*/)
             </code></pre>
             <h3>Summary</h3>
             <p>The <strong>Object.create()</strong> method creates a new object with the specified prototype object and properties.</p>
@@ -937,20 +956,20 @@ $.get('some/url', callback);
             <h2>Bonus!</h2>
             <h3>Monkey-patching</h3>
             <pre><code class="language-javascript" data-trim>
-  // Probably the most annoying piece of JS in Drupal 7
-  Drupal.jsAC.prototype.hidePopup = function(keycode) {
-      /* hidden some irrelevant stuff */
-      // Hide popup.
-      var popup = this.popup;
-      if (popup) {
-          this.popup = null;
-          $(popup).fadeOut('fast', function() {
-              $(popup).remove(); // &lt;- doesn't hide, but actually removes!
-          });
-      }
-      this.selected = false;
-      $(this.ariaLive).empty();
-  };
+// Probably the most annoying piece of JS in Drupal 7
+Drupal.jsAC.prototype.hidePopup = function(keycode) {
+    /* hidden some irrelevant stuff */
+    // Hide popup.
+    var popup = this.popup;
+    if (popup) {
+        this.popup = null;
+        $(popup).fadeOut('fast', function() {
+            $(popup).remove(); // &lt;- doesn't hide, but actually removes!
+        });
+    }
+    this.selected = false;
+    $(this.ariaLive).empty();
+};
             </code></pre>
           </section>
 
