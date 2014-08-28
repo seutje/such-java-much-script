@@ -320,9 +320,9 @@ for (var i = 0, len = foo.length; i &lt; len; i++) {
         <section>
           <h2>The even mightier Object!</h2>
           <ul>
-            <li>As mentioned before, the Object object is the basis for most types in JavaScript.</li>
-            <li>Avoid extending or overriding its prototype as this will affect nearly everything.</li>
-            <li>When looping over an object, use hasOwnProperty to verify it did not come from prototype chain
+            <li>Basis for most types in JavaScript.</li>
+            <li>Changing its prototype affects nearly everything.</li>
+            <li>for..in loops loop over properties from the entire chain!
             <pre><code class="language-javascript">Object.prototype.lol = 'lolapi';
 var foo = {'meh': 'poo'};
 for (var key in foo) {
@@ -518,6 +518,18 @@ var foo = function bar() { };
 foo.name; // 'bar'
 bar.name; // ReferenceError: bar is not defined
 // WAT?!
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>The mightiest: Function</h2>
+            <h3>I don't even...?</h3>
+            <pre><code class="language-javascript" data-trim>
+var foo = function bar() {
+  bar.meh = function() { return bar.name; };
+};
+foo(); // Calling it makes it give itself the "meh" method.
+foo.meh(); // "bar"
             </code></pre>
           </section>
 
