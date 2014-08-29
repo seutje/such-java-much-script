@@ -561,10 +561,10 @@ var foo = function() {
 };
 window.setTimeout(foo, 1000);
 // Bad:
-var foo = function() {
+var bar = function() {
   console.log('What if I took more than 1 second to run?');
 };
-window.setInterval(foo, 1000);
+window.setInterval(bar, 1000);
             </code></pre>
           </section>
 
