@@ -100,7 +100,7 @@
             <h3>Error prevention</h3>
             <ul>
               <li>The linter is you friend!</li>
-              <li>No, seriously, it will tell you to use semicolons and ===</li>
+              <li>No, seriously, it will tell you to use semicolons and ===, which will save you countless hours!</li>
             </ul>
           </section>
         </section>
@@ -574,7 +574,7 @@ window.setInterval(bar, 1000);
             <pre><code class="language-javascript" data-trim>
 // Remember, we're also an object.
 var foo = function bar(op) {
-  // Do some things...
+  // Fixed internal reference!
   bar.doStuff = function() {
     // Do stuff
     return bar;
@@ -956,10 +956,9 @@ $.get('some/url', callback);
           <p>What goes on internally:</p>
           <ul>
             <li>Reference to callback function is stored.</li>
-            <li>XMLHttpRequest is made and stored for reference.</li>
+            <li>When $.get is called, it creates and immediately returns the XMLHttpRequest object, it also stores it internally.</li>
             <li>Time passes, interpreter continues.</li>
             <li>If successfull -> callback.apply(XMLHttpRequest, [ data, textStatus, XMLHttpRequest])</li>
-            <li>When $.get is called, it immediately returns the XMLHttpRequest object.</li>
           </ul>
         </section>
 
@@ -995,7 +994,6 @@ Drupal.jsAC.prototype.hidePopup = function() { /* do nothing */ }
 // Now it won't disappear and we can theme it!
             </code></pre>
           </section>
-        </section>
 
           <section>
             <h2>Bonus!</h2>
