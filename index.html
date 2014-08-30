@@ -133,9 +133,9 @@
             </ul>
             <pre><code class="language-javascript" data-trim>
 typeof 'foo'; // "string" - Good
-typeof String('foo'); // "string" - Bad
+typeof String('foo'); // "string" - Not so good
 typeof new String('foo'); // "object" - Bad
-typeof (new String('foo')).valueOf(); // "string" - Bad
+typeof (new String('foo')).valueOf(); // "string" - Awkward
             </code></pre>
           </section>
 
