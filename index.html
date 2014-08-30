@@ -244,8 +244,13 @@ foo.lol; // 'lol'
             <h3>cheap casting!</h3>
             <p>Using the unary + operator, we can easily cast to a number</p>
             <pre><code class="language-javascript" data-trim>
-'1.23' + '1.23'; // '1.231.23'
+'1.23' + '1.23'; // '1.231.23' (string)
 (+'1.23') + (+'1.23'); // 2.46 (parens optional)
++'1.23' + + '1.23'; // 2.46
++'1.23'; // 1.23
++'1.23.23'; // NaN (!!)
++'1.999999999999999'; // 1.999999999999999
++'1.9999999999999999'; // 2
             </code></pre>
             <p>This does not save you from <code>NaN</code>ty<code>NaN</code> problems though, always check user input!</p>
           </section>
