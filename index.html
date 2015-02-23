@@ -450,29 +450,6 @@ four(); // ReferenceError "four is not defined"
           </section>
 
           <section>
-            <h2>Intermission</h2>
-            <h3>Hoisting</h3>
-            <p>Actual interpretation</p>
-            <pre><code class="language-javascript" data-trim>
-var one, three; // Variable name is "hoisted" to top of scope.
-function two() {}; // Entire function declaration gets hoisted.
-
-one(); // TypeError "one is not a function"
-two(); // Works.
-three(); // TypeError "three is not a function"
-four(); // ReferenceError "four is not defined"
-
-one = function() {}; // Anonymous function expression.
-three = function four() {}; // Named function expression.
-
-one(); // Works.
-two(); // Works.
-three(); // Works.
-four(); // ReferenceError "four is not defined"
-            </code></pre>
-          </section>
-
-          <section>
             <h2>The mightiest: Function</h2>
             <h3>Can return functions</h3>
             <pre><code class="language-javascript" data-trim>
@@ -609,6 +586,29 @@ var foo = function bar() {
 foo.name; // 'bar'
 foo().name; // 'bar'
 foo()()()()()()()(); // ...
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>But wait!</h2>
+            <h3>Hoisting</h3>
+            <p>Actual interpretation</p>
+            <pre><code class="language-javascript" data-trim>
+var one, three; // Variable name is "hoisted" to top of scope.
+function two() {}; // Entire function declaration gets hoisted.
+
+one(); // TypeError "one is not a function"
+two(); // Works.
+three(); // TypeError "three is not a function"
+four(); // ReferenceError "four is not defined"
+
+one = function() {}; // Anonymous function expression.
+three = function four() {}; // Named function expression.
+
+one(); // Works.
+two(); // Works.
+three(); // Works.
+four(); // ReferenceError "four is not defined"
             </code></pre>
           </section>
 
