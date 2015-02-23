@@ -180,6 +180,16 @@ Object.prototype.toString.call(/regex/); // "[object RegExp]"
           </section>
 
           <section>
+            <h2>Bonus!</h2>
+            <pre><code class="language-javascript" data-trim>
+var foo = new Number(0);
+foo === 0; // "false" - foo is an obj, 0 is an int.
+foo == 0; // "true" - so foo is falsy?
+!!foo; // "true" - I guess not o.O
+            </code></pre>
+          </section>
+
+          <section>
             <h2>Cautionary note on strings</h2>
             <ul>
               <li>Not as bad as PHP, but still pretty weird sometimes.</li>
@@ -211,7 +221,7 @@ foo.bar; // undefined
           </section>
 
           <section>
-            <h2>Bonus!</h2>
+            <h2>Bonus Bonus!</h2>
             <pre><code class="language-javascript" data-trim>
 var foo = new String('foo');
 // Secretly an object wrapper pretending to be a string
@@ -242,7 +252,8 @@ foo.lol; // 'lol'
           <section>
             <h2>Type coercion</h2>
             <h3>cheap casting!</h3>
-            <p>Using the unary + operator, we can easily cast to a number</p>
+            <p>Using the unary + operator, we can easily cast to a number.</p>
+            <p>This works similar to <code>parseFloat()</code>, except it will return NaN if any part of the string could not be parsed.</p>
             <pre><code class="language-javascript" data-trim>
 '1.23' + '1.23'; // '1.231.23' (string)
 (+'1.23') + (+'1.23'); // 2.46 (parens optional)
@@ -259,6 +270,7 @@ foo.lol; // 'lol'
             <h2>Truthy falsy</h2>
             <h3>What !!is and what !is?</h3>
             <p>The following values are considered not "truthy" and will coerce to <code>false</code>:<br><code>undefined</code>, <code>null</code>, <code>NaN</code>, <code>0</code>, <code>''</code></p>
+            <p>Gotcha: <code>!!'0'; // "true"</code></p>
           </section>
 
           <section>
@@ -319,6 +331,7 @@ for (var i = 0, len = foo.length; i &lt; len; i++) {
 }
                 </code></pre></li>
             </ul>
+            <p>Don't care about IE8?<br>Use <code>Array.forEach(callback)</code> (note: unbreakable!)</p>
           </section>
         </section>
 
@@ -635,6 +648,7 @@ one instanceof Foo; // true
             <h2>The mightiest: Functions</h2>
             <h3>Inheritance</h3>
             <pre><code class="language-javascript" data-trim>
+// Set up constructor.
 var Foo = function() {
   this.bar = 0;
 };
@@ -645,7 +659,7 @@ Foo.prototype = {
 var foo = new Foo(); // foo > Foo.prototype > Object.prototype > null
 foo.addBar();
 foo.bar; // 1
-Object.getPrototypeOf(foo).bar; // undefined
+Object.getPrototypeOf(foo).bar; // undefined (not available in IE<9)
 Foo.prototype.meh = 'lol';
 foo.meh; // 'lol'
             </code></pre>
@@ -657,7 +671,7 @@ foo.meh; // 'lol'
             <pre><code class="language-javascript" data-trim>
 var Foo = function() {
   this.bar = 0;
-  this.addBar = function() { this.bar++; return this.bar; };
+  this.addBar = function() { return ++this.bar; };
 };
 var Bar = function() {
   this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
@@ -680,7 +694,7 @@ foo.meh; // undefined
             <pre><code class="language-javascript" data-trim>
 var Foo = function() {
   this.bar = 0;
-  this.addBar = function() { this.bar++; return this.bar; };
+  this.addBar = function() { return ++this.bar; };
 };
 var Bar = function() {
   this.addBar = function(i) { this.bar = this.bar + i; return this.bar; };
@@ -797,7 +811,7 @@ document.children[0].children;
 // [ &lt;element with class someClass>, &lt;...> ]
 document.getElementsByClassName('someClass');
 
-// equivalent
+// equivalent (note: IE8 only supports CSS2 selectors)
 document.querySelectorAll('.someClass');
           </code></pre>
 
@@ -897,7 +911,7 @@ form.addEventListener('submit', handler);
 (function(window) {
   var handler = function(event) {
         // Only act if the actual target is '.foo'
-        if (event.target.className = 'foo') {
+        if (event.target.className === 'foo') {
           event.preventDefault();
           console.log('Do something!');
         }
