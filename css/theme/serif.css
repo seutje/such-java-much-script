@@ -136,3 +136,6 @@ body {
  *********************************************/
 .reveal .slide-number {
   color: #51483d; }
+
+.reveal code.unicode span.string {
+  font-family: 'Quivira'; }

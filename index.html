@@ -204,6 +204,28 @@ parseInt('12foo34', 10); // 12 (!)
           </section>
 
           <section>
+            <h2>More caution</h2>
+            <ul>
+              <li>Unicode handling can be a bit wonky
+                <pre><code class="unicode language-javascript" data-trim>
+var poo = '💩';
+poo.length; // 2
+poo.split('').reverse().join(''); // "��"
+poo === '\uD83D\uDCA9'; // true
+                </code></pre>
+                <pre><code class="languae-javascript" data-trim>
+var a = 'se\xF1orita'; // "señorita"
+var b = 'sen\u0303orita'; // "señorita"
+a == b; // false
+a.length; // 8
+b.length; // 9
+                </code></pre>
+              </li>
+              <li>Use <a href="https://github.com/bestiejs/punycode.js">Punycode.js</a> or <a href="https://mathiasbynens.be/notes/javascript-unicode">funky regex</a> if you need to support astral plane characters.</li>
+            </ul>
+          </section>
+
+          <section>
             <h2>Bonus!</h2>
             <ul>
               <li>They can be partially accessed like an array (mainly getters).</li>

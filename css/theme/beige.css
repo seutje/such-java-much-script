@@ -1,9 +1,9 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 /**
  * Beige theme for reveal.js.
  *
  * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
  */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 @font-face {
   font-family: 'League Gothic';
   src: url("../../lib/font/league_gothic-webfont.eot");
@@ -26,7 +26,7 @@ body {
 
 .reveal {
   font-family: "Lato", sans-serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: normal;
   letter-spacing: -0.02em;
   color: #333333; }
@@ -146,3 +146,6 @@ body {
  *********************************************/
 .reveal .slide-number {
   color: #8b743d; }
+
+.reveal code.unicode span.string {
+  font-family: 'Quivira'; }
