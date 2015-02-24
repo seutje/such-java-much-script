@@ -305,6 +305,8 @@ var foo = someVar || someInit();
 var bar = function (x) {
   x = x || myDefaults;
 };
+// Or checks!
+var baz = someCheck() && willOnlyRunIfSomeCheckSucceeded();
             </code></pre>
           </section>
         </section>
@@ -451,27 +453,6 @@ myPrivate; // ReferenceError: myPrivate is not defined
           </section>
 
           <section>
-            <h2>Intermission</h2>
-            <h3>Hoisting</h3>
-            <p>Variable and function declarations are invisibly moved to the top of their scope</p>
-            <pre><code class="language-javascript" data-trim>
-one(); // TypeError "one is not a function"
-two(); // Works.
-three(); // TypeError "three is not a function"
-four(); // ReferenceError "four is not defined"
-
-var one = function() {}; // Anonymous function expression.
-function two() {}; // Function declaration.
-var three = function four() {}; // Named function expression.
-
-one(); // Works.
-two(); // Works.
-three(); // Works.
-four(); // ReferenceError "four is not defined"
-            </code></pre>
-          </section>
-
-          <section>
             <h2>The mightiest: Function</h2>
             <h3>Can return functions</h3>
             <pre><code class="language-javascript" data-trim>
@@ -545,7 +526,7 @@ foo.apply('lol'/* , [arg1, arg2] */); // 'lol'
             <h3>So how do I function?</h3>
             <pre><code class="language-javascript" data-trim>
 // Defined at run-time.
-foo(); // ReferenceError: foo is not defined
+foo(); // TypeError: undefined is not a function
 
 var foo = function () {};
             </code></pre>
@@ -612,7 +593,28 @@ foo()()()()()()()(); // ...
           </section>
 
           <section>
-            <h2>But wait!</h2>
+            <h2>Intermission</h2>
+            <h3>Hoisting</h3>
+            <p>Variable and function declarations are invisibly moved to the top of their scope</p>
+            <pre><code class="language-javascript" data-trim>
+one(); // TypeError "one is not a function"
+two(); // Works.
+three(); // TypeError "three is not a function"
+four(); // ReferenceError "four is not defined"
+
+var one = function() {}; // Anonymous function expression.
+function two() {}; // Function declaration.
+var three = function four() {}; // Named function expression.
+
+one(); // Works.
+two(); // Works.
+three(); // Works.
+four(); // ReferenceError "four is not defined"
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Intermission!</h2>
             <h3>Hoisting</h3>
             <p>Actual interpretation</p>
             <pre><code class="language-javascript" data-trim>
@@ -699,7 +701,7 @@ foo.doStuff(); // The same global reference now works!
             <pre><code class="language-javascript" data-trim>
 // Define it as a constructor.
 function Foo() { // capital is just convention
-  this.bar = function() { return this; };
+  this.bar = function() { return this; }; // Note the "this"
 };
 var one = new Foo(); // Note the "new"
 var two = new Foo();
@@ -707,6 +709,8 @@ one === two; // false, they are 2 separate instances
 one.bar() === two.bar(); // false
 one.bar() === one; // true
 one instanceof Foo; // true
+Foo(); // note the absence of "new"
+window.bar; // We just hosed the global scope
             </code></pre>
           </section>
 
@@ -1045,6 +1049,37 @@ $.get('some/url', callback);
             <li>Time passes, interpreter continues.</li>
             <li>If successfull -> callback.apply(XMLHttpRequest, [ data, textStatus, XMLHttpRequest])</li>
           </ul>
+        </section>
+
+        <section>
+          <h2>Drupal specifics</h2>
+          <h3>Behaviors</h3>
+          <pre><code class="language-javascript" data-trim>
+Drupal.Foo = function(el) { this.el = el; /* do fancy stuff with this.el */ };
+Drupal.Foo.prototype.destroy = function () { /* undo fancy stuff to this.el */ }
+Drupal.behaviors.foo = {
+  attach: function(context) {
+    $('.some-selector', context).once('foo').each(this.attachHandler.bind(this));
+  },
+  attachHandler: function(i, el) {
+    var $el = $(el),
+        instance = new Drupal.Foo(el);
+    $el.data('foo', instance);
+    this.instances = this.instances || [];
+    this.instances.push(instance);
+  },
+  detach: function(context) {
+    $('.some-selector.foo-processed', context).each(this.detachHandler.bind(this));
+  },
+  detachHandler: function(i, el) {
+    var $el = $(el),
+        instance = $el.data('foo'),
+        index = this.instances.indexOf(instance);
+    instance.destroy();
+    this.instances.splice(index, 1);
+  }
+};
+          </code></pre>
         </section>
 
         <section>
