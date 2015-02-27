@@ -136,6 +136,7 @@ typeof 'foo'; // "string" - Good
 typeof String('foo'); // "string" - Not so good
 typeof new String('foo'); // "object" - Bad
 typeof (new String('foo')).valueOf(); // "string" - Awkward
+(new String('foo')) === 'foo'; // false - o.O
             </code></pre>
           </section>
 
@@ -638,24 +639,6 @@ four(); // ReferenceError "four is not defined"
 
           <section>
             <h2>The mightiest: Functions</h2>
-            <h3>Callbacks &amp; setTimeout/setInterval</h3>
-            <pre><code class="language-javascript" data-trim>
-// Logs 'HOLAS!' every second.
-var foo = function() {
-  console.log('HOLAS!');
-  window.setTimeout(foo, 1000);
-};
-window.setTimeout(foo, 1000);
-// Bad:
-var bar = function() {
-  console.log('What if I took more than 1 second to run?');
-};
-window.setInterval(bar, 1000);
-            </code></pre>
-          </section>
-
-          <section>
-            <h2>The mightiest: Functions</h2>
             <h3>Why is this even useful?</h3>
             <pre><code class="language-javascript" data-trim>
 // Remember, we're also an object.
@@ -680,18 +663,37 @@ foo().doStuff().doMoreStuff(); // or foo('doStuff')('doMoreStuff')...
 
           <section>
             <h2>The mightiest: Functions</h2>
-            <h3>But wait!</h3>
+            <h3>Callbacks &amp; setTimeout/setInterval</h3>
             <pre><code class="language-javascript" data-trim>
-// Same as before.
-var foo = function bar() {
-  bar.doStuff = function() { return bar; };
-  return bar;
+// Logs 'HOLAS!' every second.
+var foo = function() {
+  console.log('HOLAS!');
+  window.setTimeout(foo, 1000);
 };
-// But now we call the method directly on the object
-// instead of executing it first.
-foo.doStuff(); // TypeError: undefined is not a function
-foo(); // We get the same object function, but now it has methods.
-foo.doStuff(); // The same global reference now works!
+window.setTimeout(foo, 1000);
+// Bad:
+var bar = function() {
+  console.log('What if I took more than 1 second to run?');
+};
+window.setInterval(bar, 1000);
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>The mightiest: Functions</h2>
+            <h3>AJAX</h3>
+            <pre><code class="language-javascript" data-trim>
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function(e) {
+  if (xhr.readyState === 4) {
+    if (xhr.status === 200) {
+      doStuffWithData(JSON.parse(xhr.responseText));
+    }
+  }
+};
+xhr.open('GET', '/lol', true);
+// xhr.setRequestHeader('Content-Type', 'some/mime-type');
+xhr.send();
             </code></pre>
           </section>
 
