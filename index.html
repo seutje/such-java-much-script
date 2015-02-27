@@ -307,7 +307,7 @@ var bar = function (x) {
   x = x || myDefaults;
 };
 // Or checks!
-var baz = someCheck() && willOnlyRunIfSomeCheckSucceeded();
+var ready = someInit() && attachThatNeedsToRunAfterInit();
             </code></pre>
           </section>
         </section>
@@ -316,7 +316,7 @@ var baz = someCheck() && willOnlyRunIfSomeCheckSucceeded();
           <section>
             <h2>The mighty Array!</h2>
             <ul>
-              <li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to show its underling object-like nature.<pre><code class="language-javascript" data-trim>
+              <li>Unlike in PHP, array keys can only be numeric, using string keys on an array will cause it to show its underlying object-like nature.<pre><code class="language-javascript" data-trim>
 var foo = ['poo'];
 foo.length; // 1
 foo.bar = 'bar';
